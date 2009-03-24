@@ -22,6 +22,7 @@ public class Agent {
 	private boolean nasaoZlato;
 	
 	public Agent(Svijet svijet) {
+		
 		posjecenaPolja = new HashSet<Point>();
 		sigurnaNeposjecenaPolja = new HashSet<Point>();
 		smrdljivaPolja = new HashSet<Point>();
