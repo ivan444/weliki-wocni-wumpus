@@ -72,14 +72,226 @@ public class Agent {
 	}
 	
 	/**
-	 * Zapisivanje obilježja polja.
+	 * Zapisivanje obiljezja polja - obogacivanje baze znanja.
 	 * 
-	 * @param koordinata Koordinata na kojoj se polje nalazi.
+	 * @param koordinata Koordinata polja na kojem se agent trenutno nalazi.
 	 */
 	private void zabiljezi(Point koordinata) {
+		
 		Polje polje = this.svijet.opisi(koordinata);
 		
-		// TODO: Dodaj opis u skupove (sa papira "Baza znanja") (radi Teta Vedrana)
+		Point koordinataGore = new Point (koordinata.x, koordinata.y+1);
+		Point koordinataDolje = new Point (koordinata.x, koordinata.y-1);
+		Point koordinataLijevo = new Point (koordinata.x-1, koordinata.y);
+		Point koordinataDesno = new Point (koordinata.x+1, koordinata.y);		
+		
+		// Ne propuhuje, ne smrdi, ne sjaji.
+		if (!polje.isPropuhuje() && !polje.isSmrdi() && !polje.isSjaji()) {			
+			sigurnaNeposjecenaPolja.add(koordinata);
+					
+			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
+				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
+					sigurnaNeposjecenaPolja.add(koordinataGore); 
+				}
+				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
+					sigurnaNeposjecenaPolja.add(koordinataDolje);
+				}					
+				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
+					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+				}				
+				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
+					sigurnaNeposjecenaPolja.add(koordinataDesno);
+				}						
+		}
+		
+		// Ne propuhuje, ne smrdi, ali sjaji!
+		// Evidencija o poljima na kojima se mozda nalazi zlato.
+		if (!polje.isPropuhuje() && !polje.isSmrdi() && polje.isSjaji()) {
+			sigurnaNeposjecenaPolja.add(koordinata);
+			
+			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
+				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
+					sigurnaNeposjecenaPolja.add(koordinataGore); 
+					potencijalnaZlata.add(koordinataGore);
+				}
+				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
+					sigurnaNeposjecenaPolja.add(koordinataDolje);
+					potencijalnaZlata.add(koordinataDolje);
+				}					
+				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
+					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+					potencijalnaZlata.add(koordinataLijevo);
+				}				
+				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
+					sigurnaNeposjecenaPolja.add(koordinataDesno);
+					potencijalnaZlata.add(koordinataDesno);
+				}			
+		}
+		
+		
+		// Ne propuhuje, smrdi, ne sjaji!
+		// Evidencija o poljima na kojima se mozda nalazi cudoviste.
+		if (!polje.isPropuhuje() && polje.isSmrdi() && !polje.isSjaji()) {
+			sigurnaNeposjecenaPolja.add(koordinata);
+			
+			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
+				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
+					sigurnaNeposjecenaPolja.add(koordinataGore); 
+					potencijalnaCudovista.add(koordinataGore);					
+				}
+				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
+					sigurnaNeposjecenaPolja.add(koordinataDolje);
+					potencijalnaCudovista.add(koordinataDolje);
+				}					
+				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
+					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+					potencijalnaCudovista.add(koordinataLijevo);
+				}				
+				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
+					sigurnaNeposjecenaPolja.add(koordinataDesno);
+					potencijalnaCudovista.add(koordinataDesno);
+				}			
+		}
+		
+		// Ne propuhuje, ali smrdi i sjaji!
+		// Evidencija o poljima na kojima se mozda nalazi cudoviste i zlato.
+		if (!polje.isPropuhuje() && polje.isSmrdi() && polje.isSjaji()) {
+			sigurnaNeposjecenaPolja.add(koordinata);
+			
+			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
+				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
+					sigurnaNeposjecenaPolja.add(koordinataGore); 
+					potencijalnaCudovista.add(koordinataGore);
+					potencijalnaZlata.add(koordinataGore);					
+				}
+				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
+					sigurnaNeposjecenaPolja.add(koordinataDolje);
+					potencijalnaCudovista.add(koordinataDolje);
+					potencijalnaZlata.add(koordinataDolje);
+				}					
+				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
+					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+					potencijalnaCudovista.add(koordinataLijevo);
+					potencijalnaZlata.add(koordinataLijevo);
+				}				
+				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
+					sigurnaNeposjecenaPolja.add(koordinataDesno);
+					potencijalnaCudovista.add(koordinataDesno);
+					potencijalnaZlata.add(koordinataDesno);
+				}			
+		}
+		
+		// Propuhuje, ali ne smrdi i ne sjaji!
+		// Evidencija o poljima na kojima se mozda nalazi jama.
+		if (polje.isPropuhuje() && !polje.isSmrdi() && !polje.isSjaji()){
+			sigurnaNeposjecenaPolja.add(koordinata);
+			
+			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
+				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
+					sigurnaNeposjecenaPolja.add(koordinataGore); 
+					potencijalneJame.add(koordinataGore);
+				}
+				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
+					sigurnaNeposjecenaPolja.add(koordinataDolje);
+					potencijalneJame.add(koordinataDolje);
+				}					
+				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
+					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+					potencijalneJame.add(koordinataLijevo);
+				}				
+				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
+					sigurnaNeposjecenaPolja.add(koordinataDesno);
+					potencijalneJame.add(koordinataDesno);
+				}					
+		}
+		
+		// Propuhuje, ne smrdi, ali sjaji!
+		// Evidencija o poljima na kojima se mozda nalazi jama i zlato.
+		if (polje.isPropuhuje() && !polje.isSmrdi() && polje.isSjaji()){
+			sigurnaNeposjecenaPolja.add(koordinata);
+			
+			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
+				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
+					sigurnaNeposjecenaPolja.add(koordinataGore); 
+					potencijalneJame.add(koordinataGore);
+					potencijalnaZlata.add(koordinataGore);
+				}
+				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
+					sigurnaNeposjecenaPolja.add(koordinataDolje);
+					potencijalneJame.add(koordinataDolje);
+					potencijalnaZlata.add(koordinataDolje);
+				}					
+				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
+					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+					potencijalneJame.add(koordinataLijevo);
+					potencijalnaZlata.add(koordinataLijevo);
+				}				
+				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
+					sigurnaNeposjecenaPolja.add(koordinataDesno);
+					potencijalneJame.add(koordinataDesno);
+					potencijalnaZlata.add(koordinataDesno);
+				}					
+		}
+		
+		// Propuhuje, smrdi, ali ne sjaji!
+		// Evidencija o poljima na kojima se mozda nalazi jama i cudoviste.
+		if (polje.isPropuhuje() && polje.isSmrdi() && !polje.isSjaji()){
+			sigurnaNeposjecenaPolja.add(koordinata);
+			
+			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
+				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
+					sigurnaNeposjecenaPolja.add(koordinataGore); 
+					potencijalneJame.add(koordinataGore);
+					potencijalnaCudovista.add(koordinataGore);
+				}
+				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
+					sigurnaNeposjecenaPolja.add(koordinataDolje);
+					potencijalneJame.add(koordinataDolje);
+					potencijalnaCudovista.add(koordinataDolje);
+				}					
+				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
+					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+					potencijalneJame.add(koordinataLijevo);
+					potencijalnaCudovista.add(koordinataLijevo);
+				}				
+				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
+					sigurnaNeposjecenaPolja.add(koordinataDesno);
+					potencijalneJame.add(koordinataDesno);
+					potencijalnaCudovista.add(koordinataDesno);
+				}					
+		}
+		
+		// Propuhuje, smrdi i sjaji ZOMG
+		// Evidencija o poljima na kojima se mozda nalazi jama, cudoviste i zlato.
+		if (polje.isPropuhuje() && polje.isSmrdi() && polje.isSjaji()){
+			sigurnaNeposjecenaPolja.add(koordinata);
+			
+			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
+				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
+					sigurnaNeposjecenaPolja.add(koordinataGore); 
+					potencijalneJame.add(koordinataGore);
+					potencijalnaCudovista.add(koordinataGore);
+					potencijalnaZlata.add(koordinataGore);
+				}
+				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
+					sigurnaNeposjecenaPolja.add(koordinataDolje);
+					potencijalneJame.add(koordinataDolje);
+					potencijalnaCudovista.add(koordinataDolje);
+					potencijalnaZlata.add(koordinataDolje);
+				}					
+				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
+					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+					potencijalneJame.add(koordinataLijevo);
+					potencijalnaCudovista.add(koordinataLijevo);
+					potencijalnaZlata.add(koordinataLijevo);
+				}				
+				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
+					sigurnaNeposjecenaPolja.add(koordinataDesno);
+					potencijalneJame.add(koordinataDesno);
+					potencijalnaCudovista.add(koordinataDesno);
+					potencijalnaZlata.add(koordinataDesno);
+				}					
+		}
 	}
 	
 	public void pomakniSe() {
