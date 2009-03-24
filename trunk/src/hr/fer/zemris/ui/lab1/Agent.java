@@ -2,11 +2,9 @@ package hr.fer.zemris.ui.lab1;
 
 import java.awt.Point;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Realizacija agenta.
@@ -25,8 +23,12 @@ public class Agent {
 	private boolean zivim;
 	private boolean nasaoZlato;
 	
+	/**
+	 * Konstruktor.
+	 * 
+	 * @param svijet Svijet u kojem agent jest.
+	 */
 	public Agent(Svijet svijet) {
-		
 		posjecenaPolja = new HashSet<Point>();
 		sigurnaNeposjecenaPolja = new HashSet<Point>();
 		smrdljivaPolja = new HashSet<Point>();
@@ -41,7 +43,10 @@ public class Agent {
 		this.pozicija = new Point(1,1);
 		promotriOkolis();
 	}
-
+	
+	/**
+	 * Prikupljanje znanja o okolini.
+	 */
 	private void promotriOkolis() {
 		posjecenaPolja.add(pozicija);
 		Point koordinata;
@@ -304,8 +309,14 @@ public class Agent {
 		promotriOkolis();
 	}
 	
-	//!!! ATT PAZI VIDI BITNO VAŽNO
-	// Pri svakom mijenjanju pozicije, molim Vas, koristite ovu metodu.
+	/**
+	 * Mijenjanje pozicije agenta (i obavljanje svih poslova koji se pri
+	 * pomaku moraju obaviti!).<br>
+	 * Obavezno koristiti ovu metodu, a ne direktno mijenjati poziciju.
+	 * 
+	 * @param x X koordinata pozicije na koju mičemo agenta.
+	 * @param y Y koordinata pozicije na koju mičemo agenta.
+	 */
 	private void promijeniPoziciju(int x, int y) {
 		this.pozicija.setLocation(x, y);
 		// TODO: obavijesti sve o promjeni...
@@ -318,16 +329,16 @@ public class Agent {
 	/**
 	 * Pomiče agenta na neko posjećeno polje .
 	 * 
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x X koordinata polja na koje želimo pomaknuti agenta.
+	 * @param y Y koordinata polja na koje želimo pomaknuti agenta.
+	 * @return True ako se agent uspješno pomaknuo na točku ({@code x}, {@code y}).
 	 */
 	private boolean odiNaPolje(int x, int y) {
 		List<Point> put = new LinkedList<Point>();
 		Set<Point> posjecene = new HashSet<Point>();
 		
 		Point odrediste = new Point(x, y);
-		if (pomak(pozicija.x, pozicija.y, odrediste, put, posjecene)) {
+		if (izgradnjaPuta(pozicija.x, pozicija.y, odrediste, put, posjecene)) {
 			for (Point p : put) {
 				promijeniPoziciju(p.x, p.y);
 			}
@@ -338,8 +349,17 @@ public class Agent {
 		}
 	}
 	
-	// Ogromna i ružna metoda, al što'š...
-	private boolean pomak(int x, int y, Point odrediste, List<Point> put,
+	/**
+	 * Izgradnja puta od točke ({@code x}, {@code y}) do točke {@code odredište}.
+	 * 
+	 * @param x X koordinata točke od koje krećemo.
+	 * @param y Y koordinata točke od koje krećemo.
+	 * @param odrediste Odredišna točka.
+	 * @param put Put koji smo prošli.
+	 * @param posjecene Skup posjećenih točaka.
+	 * @return True ako smo uspješno izgradili put.
+	 */
+	private boolean izgradnjaPuta(int x, int y, Point odrediste, List<Point> put,
 			Set<Point> posjecene) {
 		
 		Point radna = new Point(x, y);
@@ -352,7 +372,7 @@ public class Agent {
 			return true;
 		}
 		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-			if (pomak(x+1, y, odrediste, put, posjecene)) {
+			if (izgradnjaPuta(x+1, y, odrediste, put, posjecene)) {
 				put.add(radna);
 				return true;
 			}
@@ -365,7 +385,7 @@ public class Agent {
 			return true;
 		}
 		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-			if (pomak(x-1, y, odrediste, put, posjecene)) {
+			if (izgradnjaPuta(x-1, y, odrediste, put, posjecene)) {
 				put.add(radna);
 				return true;
 			}
@@ -378,7 +398,7 @@ public class Agent {
 			return true;
 		}
 		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-			if (pomak(x, y+1, odrediste, put, posjecene)) {
+			if (izgradnjaPuta(x, y+1, odrediste, put, posjecene)) {
 				put.add(radna);
 				return true;
 			}
@@ -391,7 +411,7 @@ public class Agent {
 			return true;
 		}
 		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-			if (pomak(x, y-1, odrediste, put, posjecene)) {
+			if (izgradnjaPuta(x, y-1, odrediste, put, posjecene)) {
 				put.add(radna);
 				return true;
 			}
@@ -400,116 +420,7 @@ public class Agent {
 		return false;
 	}
 	
-	// Pokušao implementirati A*... skužio da je overkill^overkill pri čemu "^" nije XOR
-	// Ostavljeno tek tako da ne pokušaš slično ;D
-//	private boolean odiNaPolje(int x, int y) {
-//		Point radna = new Point(pozicija);
-//		Point odrediste = new Point(x, y);
-//		Set<UdaljenaTocka> otvorene = new TreeSet<UdaljenaTocka>();
-//		List<UdaljenaTocka> zatvorene = new LinkedList<UdaljenaTocka>();
-//		
-//		otvorene.add(new UdaljenaTocka(radna, 0, 0));
-//		Point[] susjedi = new Point[4];
-//		while (!otvorene.isEmpty()) {
-//			UdaljenaTocka tocka = otvorene.iterator().next();
-//			otvorene.iterator().remove();
-//			radna = tocka.getTocka();
-//			if (radna.equals(odrediste)) {
-//				zatvorene.add(tocka);
-//				break;
-//			}
-//			
-//			susjedi[0].x = radna.x+1;
-//			susjedi[0].y = radna.y;
-//			susjedi[1].x = radna.x-1;
-//			susjedi[1].y = radna.y;
-//			susjedi[2].x = radna.x;
-//			susjedi[2].y = radna.y+1;
-//			susjedi[3].x = radna.x;
-//			susjedi[3].y = radna.y-1;
-//			
-//			for (int i = 0; i < susjedi.length; i++) {
-//				if (posjecenaPolja.contains(susjedi[i])) {
-//					for (UdaljenaTocka zatvor : zatvorene) {
-//						if (zatvor.equals(susjedi[i])) {
-//							if ()
-//						}
-//					}
-//				}
-//			}
-//			
-//		}
-//		
-//		return true;
-//		
-//	}
-	
 	public void ubij() {
 		this.zivim = false;
 	}
-	
-//	private class UdaljenaTocka implements Comparable<UdaljenaTocka> {
-//		private Point tocka;
-//		private int udaljenostPocetka;
-//		private int udaljenostHeuristika;
-//		
-//		public UdaljenaTocka(Point tocka, int udaljenostPocetka,
-//				int udaljenostHeuristika) {
-//			super();
-//			this.tocka = tocka;
-//			this.udaljenostPocetka = udaljenostPocetka;
-//			this.udaljenostHeuristika = udaljenostHeuristika;
-//		}
-//
-//		@Override
-//		public int compareTo(UdaljenaTocka o) {
-//			return (this.udaljenostHeuristika+this.udaljenostPocetka)
-//					- (o.getUdaljenostHeuristika()+o.getUdaljenostPocetka());
-//		}
-//
-//		public Point getTocka() {
-//			return tocka;
-//		}
-//
-//		public int getUdaljenostPocetka() {
-//			return udaljenostPocetka;
-//		}
-//
-//		public int getUdaljenostHeuristika() {
-//			return udaljenostHeuristika;
-//		}
-//
-//		@Override
-//		public int hashCode() {
-//			final int prime = 31;
-//			int result = 1;
-//			result = prime * result + getOuterType().hashCode();
-//			result = prime * result + ((tocka == null) ? 0 : tocka.hashCode());
-//			return result;
-//		}
-//
-//		@Override
-//		public boolean equals(Object obj) {
-//			if (this == obj)
-//				return true;
-//			if (obj == null)
-//				return false;
-//			if (getClass() != obj.getClass())
-//				return false;
-//			UdaljenaTocka other = (UdaljenaTocka) obj;
-//			if (!getOuterType().equals(other.getOuterType()))
-//				return false;
-//			if (tocka == null) {
-//				if (other.tocka != null)
-//					return false;
-//			} else if (!tocka.equals(other.getTocka()))
-//				return false;
-//			return true;
-//		}
-//
-//		private Agent getOuterType() {
-//			return Agent.this;
-//		}
-//		
-//	}
 }
