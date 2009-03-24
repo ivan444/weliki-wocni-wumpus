@@ -2,7 +2,11 @@ package hr.fer.zemris.ui.lab1;
 
 import java.awt.Point;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Realizacija agenta.
@@ -88,11 +92,212 @@ public class Agent {
 		promotriOkolis();
 	}
 	
-	private void odiNaPolje(int x, int y) {
-		// TODO: Micanje agenta do nekog polja po posjećenim poljima.
+	//!!! ATT PAZI VIDI BITNO VAŽNO
+	// Pri svakom mijenjanju pozicije, molim Vas, koristite ovu metodu.
+	private void promijeniPoziciju(int x, int y) {
+		this.pozicija.setLocation(x, y);
+		// TODO: obavijesti sve o promjeni...
 	}
+	
+	public Point getPozicija() {
+		return this.pozicija;
+	}
+	
+	/**
+	 * Pomiče agenta na neko posjećeno polje .
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	private boolean odiNaPolje(int x, int y) {
+		List<Point> put = new LinkedList<Point>();
+		Set<Point> posjecene = new HashSet<Point>();
+		
+		Point odrediste = new Point(x, y);
+		if (pomak(pozicija.x, pozicija.y, odrediste, put, posjecene)) {
+			for (Point p : put) {
+				promijeniPoziciju(p.x, p.y);
+			}
+			return false;
+			
+		} else {
+			return true;
+		}
+	}
+	
+	// Ogromna i ružna metoda, al što'š...
+	private boolean pomak(int x, int y, Point odrediste, List<Point> put,
+			Set<Point> posjecene) {
+		
+		Point radna = new Point(x, y);
+		posjecene.add(radna);
+			
+		radna.x = x+1;
+		radna.y = y;
+		if (radna.equals(odrediste)) {
+			put.add(odrediste);
+			return true;
+		}
+		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+			if (pomak(x+1, y, odrediste, put, posjecene)) {
+				put.add(radna);
+				return true;
+			}
+		}
+		
+		radna.x = x-1;
+		radna.y = y;
+		if (radna.equals(odrediste)) {
+			put.add(odrediste);
+			return true;
+		}
+		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+			if (pomak(x-1, y, odrediste, put, posjecene)) {
+				put.add(radna);
+				return true;
+			}
+		}
+		
+		radna.x = x;
+		radna.y = y+1;
+		if (radna.equals(odrediste)) {
+			put.add(odrediste);
+			return true;
+		}
+		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+			if (pomak(x, y+1, odrediste, put, posjecene)) {
+				put.add(radna);
+				return true;
+			}
+		}
+		
+		radna.x = x;
+		radna.y = y-1;
+		if (radna.equals(odrediste)) {
+			put.add(odrediste);
+			return true;
+		}
+		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+			if (pomak(x, y-1, odrediste, put, posjecene)) {
+				put.add(radna);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	// Pokušao implementirati A*... skužio da je overkill^overkill pri čemu "^" nije XOR
+	// Ostavljeno tek tako da ne pokušaš slično ;D
+//	private boolean odiNaPolje(int x, int y) {
+//		Point radna = new Point(pozicija);
+//		Point odrediste = new Point(x, y);
+//		Set<UdaljenaTocka> otvorene = new TreeSet<UdaljenaTocka>();
+//		List<UdaljenaTocka> zatvorene = new LinkedList<UdaljenaTocka>();
+//		
+//		otvorene.add(new UdaljenaTocka(radna, 0, 0));
+//		Point[] susjedi = new Point[4];
+//		while (!otvorene.isEmpty()) {
+//			UdaljenaTocka tocka = otvorene.iterator().next();
+//			otvorene.iterator().remove();
+//			radna = tocka.getTocka();
+//			if (radna.equals(odrediste)) {
+//				zatvorene.add(tocka);
+//				break;
+//			}
+//			
+//			susjedi[0].x = radna.x+1;
+//			susjedi[0].y = radna.y;
+//			susjedi[1].x = radna.x-1;
+//			susjedi[1].y = radna.y;
+//			susjedi[2].x = radna.x;
+//			susjedi[2].y = radna.y+1;
+//			susjedi[3].x = radna.x;
+//			susjedi[3].y = radna.y-1;
+//			
+//			for (int i = 0; i < susjedi.length; i++) {
+//				if (posjecenaPolja.contains(susjedi[i])) {
+//					for (UdaljenaTocka zatvor : zatvorene) {
+//						if (zatvor.equals(susjedi[i])) {
+//							if ()
+//						}
+//					}
+//				}
+//			}
+//			
+//		}
+//		
+//		return true;
+//		
+//	}
 	
 	public void ubij() {
 		this.zivim = false;
 	}
+	
+//	private class UdaljenaTocka implements Comparable<UdaljenaTocka> {
+//		private Point tocka;
+//		private int udaljenostPocetka;
+//		private int udaljenostHeuristika;
+//		
+//		public UdaljenaTocka(Point tocka, int udaljenostPocetka,
+//				int udaljenostHeuristika) {
+//			super();
+//			this.tocka = tocka;
+//			this.udaljenostPocetka = udaljenostPocetka;
+//			this.udaljenostHeuristika = udaljenostHeuristika;
+//		}
+//
+//		@Override
+//		public int compareTo(UdaljenaTocka o) {
+//			return (this.udaljenostHeuristika+this.udaljenostPocetka)
+//					- (o.getUdaljenostHeuristika()+o.getUdaljenostPocetka());
+//		}
+//
+//		public Point getTocka() {
+//			return tocka;
+//		}
+//
+//		public int getUdaljenostPocetka() {
+//			return udaljenostPocetka;
+//		}
+//
+//		public int getUdaljenostHeuristika() {
+//			return udaljenostHeuristika;
+//		}
+//
+//		@Override
+//		public int hashCode() {
+//			final int prime = 31;
+//			int result = 1;
+//			result = prime * result + getOuterType().hashCode();
+//			result = prime * result + ((tocka == null) ? 0 : tocka.hashCode());
+//			return result;
+//		}
+//
+//		@Override
+//		public boolean equals(Object obj) {
+//			if (this == obj)
+//				return true;
+//			if (obj == null)
+//				return false;
+//			if (getClass() != obj.getClass())
+//				return false;
+//			UdaljenaTocka other = (UdaljenaTocka) obj;
+//			if (!getOuterType().equals(other.getOuterType()))
+//				return false;
+//			if (tocka == null) {
+//				if (other.tocka != null)
+//					return false;
+//			} else if (!tocka.equals(other.getTocka()))
+//				return false;
+//			return true;
+//		}
+//
+//		private Agent getOuterType() {
+//			return Agent.this;
+//		}
+//		
+//	}
 }
