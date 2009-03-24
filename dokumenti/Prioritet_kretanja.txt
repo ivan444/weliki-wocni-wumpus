@@ -1,0 +1,20 @@
+Prioritet kretanja
+
+za sva neposjecena susjedna polja
+	1. sigurna i u skupu potencijalnoZlato
+	2. sigurna i sjaje
+	3. sigurna
+	4. sigurna i (propuh ili smrad) i u skupu potencijalnoZlato
+	5. sigurna i (propuh ili smrad) i sjaje
+	
+za sva neposjecena polja - nesusjedna
+	1. sigurna i u skupu potencijalnoZlato
+	2. sigurna i sjaje
+	3. sigurna
+	4. sigurna i (propuh ili smrad) i u skupu potencijalnoZlato
+	5. sigurna i (propuh ili smrad) i sjaje
+
+	6. u skupu (potencijalnaJama ili potencijalniWumpus) i potencijalnoZlato
+	7. u skupu (potencijalnaJama ili potencijalniWumpus) i sjaje
+	8. u skupu (potencijalnaJama ili potencijalniWumpus)
+	
