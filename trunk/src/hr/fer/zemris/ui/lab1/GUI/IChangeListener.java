@@ -1,7 +1,7 @@
 package hr.fer.zemris.ui.lab1.GUI;
 
 /**
- * Općeniti slušać bilo kakve promjene.
+ * Općeniti slušač bilo kakve promjene.
  */
 public interface IChangeListener {
 
