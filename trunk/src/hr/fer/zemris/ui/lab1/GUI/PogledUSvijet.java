@@ -156,9 +156,9 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 	}
 	
 	/**
-	 * Pokretanje aplikacije.
+	 * Pokretanje GUI-a.
 	 */
-	public static void main(String[] args) {
+	public static void open() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				new PogledUSvijet().setVisible(true);
