@@ -1,20 +1,24 @@
 package hr.fer.zemris.ui.lab1.GUI;
 
 import hr.fer.zemris.ui.lab1.CentralnaInformacijskaAgencija;
+import hr.fer.zemris.ui.lab1.SadrzajPolja;
 import hr.fer.zemris.ui.lab1.VisaSila;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -22,7 +26,6 @@ import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
 
 public class PogledUSvijet extends JFrame implements IChangeListener {
 	private static final long serialVersionUID = 1L;
@@ -32,6 +35,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 	private JTextField txtPCudovista;
 	private JTextField txtPJama;
 	private JTextPane txtReport;
+	private JPanel agentovPogled;
 	
 	public PogledUSvijet() {
 		addWindowListener(new WindowAdapter() {
@@ -99,7 +103,6 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		});
 		newWorld.setText("Novi svijet");
 		gornjiDio.add(newWorld);
-		
 		this.getContentPane().add(gornjiDio, BorderLayout.NORTH);
 		// KRAJ: Gornja traka
 		
@@ -126,11 +129,12 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		vjerojatnostiParam.add(txtPJama);
 		velicinaParam.setPreferredSize((new Dimension(150, 0)));
 		parametri.add(vjerojatnostiParam);
-		
 		this.getContentPane().add(parametri, BorderLayout.WEST);
 		// KRAJ: Desni izbornik (parametri)
 		
 		// POCETAK: Sredina (agentov pogled)
+		prikaziNoviSvijet();
+		this.getContentPane().add(this.agentovPogled, BorderLayout.CENTER);
 		// KRAJ: Sredina (agentov pogled)
 		
 		// POCETAK: Desni dio (stvarni svijet i baza znanja)
@@ -148,14 +152,48 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		// KRAJ: Donji dio, ispis rezultata.
 	}
 	
+	private void prikaziNoviSvijet() {
+		int apSirina = VisaSila.get().getSvijet().getVelicinaSvijeta().width;
+		int apVisina = VisaSila.get().getSvijet().getVelicinaSvijeta().height;
+		this.agentovPogled = new JPanel(new GridLayout(apVisina, apSirina, 0, 0));
+		Point agentPoz = VisaSila.get().getAgent().getPozicija();
+		for (int x = 1; x <= apSirina; x++) {
+			for (int y = 1; y <= apVisina; y++) {
+				if (x == agentPoz.x && y == agentPoz.y) {
+					this.agentovPogled.add(new JLabel(new ImageIcon("slike/agent.png")));
+					continue;
+				}
+				SadrzajPolja sadrzaj = VisaSila.get().opisiPolje(x, y);
+				switch (sadrzaj) {
+				case CUDOVISTE:
+					this.agentovPogled.add(new JLabel(new ImageIcon("slike/cudoviste.png")));
+					break;
+					
+				case JAMA:
+					this.agentovPogled.add(new JLabel(new ImageIcon("slike/jama.png")));
+					break;
+					
+				case ZLATO:
+					this.agentovPogled.add(new JLabel(new ImageIcon("slike/zlato.png")));
+					break;
+					
+				default:
+					this.agentovPogled.add(new JLabel(new ImageIcon("slike/upitnik.png")));
+					break;
+				}
+				
+			}
+		}
+		
+	}
+
 	private void start() {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	private void korak() {
-		// TODO Auto-generated method stub
-		
+		VisaSila.get().getAgent().pomakniSe();
 	}
 	
 	private void pause() {

@@ -1,5 +1,6 @@
 package hr.fer.zemris.ui.lab1;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class Svijet {
 	private int visina;
 	
 	public Svijet(int sirina, int visina, double pCudovista, double pJama) {
-		mapaSvijeta = GeneratorSvijeta.stvoriSvijet(visina, sirina, pCudovista, pJama);
+		mapaSvijeta = GeneratorSvijeta.stvoriSvijet(sirina, visina, pCudovista, pJama);
 		this.visina = visina;
 		this.sirina = sirina;
 	}
@@ -59,5 +60,9 @@ public class Svijet {
 		}
 		
 		return polje.getTip();
+	}
+	
+	public Dimension getVelicinaSvijeta() {
+		return new Dimension(sirina, visina);
 	}
 }
