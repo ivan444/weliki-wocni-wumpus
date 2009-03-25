@@ -40,6 +40,11 @@ public class CentralnaInformacijskaAgencija {
 		return SingletonCIA.INSTANCE;
 	}
 	
+	public void ukloniPretplatu(IChangeListener bivsiKlijent) {
+		this.klijentiPoruka.remove(bivsiKlijent);
+		this.pratiteljiStanjaSvijeta.remove(bivsiKlijent);
+	}
+	
 	private void prodajaInformacija(String informacija) {
 		for (IChangeListener klijent : klijentiPoruka) {
 			klijent.interakcija(informacija);

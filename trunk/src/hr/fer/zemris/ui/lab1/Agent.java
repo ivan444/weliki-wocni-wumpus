@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Realizacija agenta.
  */
-public class Agent {
+public class Agent implements IAgent {
 	private Set<Point> posjecenaPolja;
 	private Set<Point> sigurnaNeposjecenaPolja;
 	private Set<Point> smrdljivaPolja;
@@ -40,6 +40,7 @@ public class Agent {
 		this.svijet = svijet;
 		this.zivim = true;
 		this.nasaoZlato = false;
+		this.pozicija = new Point();
 		promijeniPoziciju(1, 1);
 		promotriOkolis();
 	}
@@ -591,5 +592,34 @@ public class Agent {
 		this.zivim = false;
 		CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Agent je mrtav");
 		CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();
+	}
+
+	public boolean isZivim() {
+		return zivim;
+	}
+
+	public boolean isNasaoZlato() {
+		return nasaoZlato;
+	}
+	
+	/**
+	 * Agentov opis polja.
+	 * 
+	 * @param polje Koordinate polja koje agent opisuje.
+	 * @return Opis polja.
+	 */
+	public AgentPolje opisiPolje(Point polje) {
+		AgentPolje opis = new AgentPolje();
+		
+		opis.setPosjeceno(this.posjecenaPolja.contains(polje));
+		opis.setSigurnoNeposjeceno(this.sigurnaNeposjecenaPolja.contains(polje));
+		opis.setSmrdljivo(this.smrdljivaPolja.contains(polje));
+		opis.setVjetrovito(this.vjetrovitaPolja.contains(polje));
+		opis.setSjajno(this.sjajnaPolja.contains(polje));
+		opis.setPotencijalnaJama(this.potencijalneJame.contains(polje));
+		opis.setPotencijalnoCudoviste(this.potencijalnaCudovista.contains(polje));
+		opis.setPotencijalnoZlato(this.potencijalnaZlata.contains(polje));
+		
+		return opis;
 	}
 }
