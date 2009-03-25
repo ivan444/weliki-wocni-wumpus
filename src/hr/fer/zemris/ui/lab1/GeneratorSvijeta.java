@@ -50,8 +50,9 @@ public class GeneratorSvijeta {
 		long brJama = Math.round(brPolja*pJama);
 		long sumaJamaCudovista = brJama + brCudovista;
 		
-		for (int x = 1; x <= sirina; x++) {
-			for (int y = 1; y <= visina; y++) {
+		addPolje(mapaSvijeta, 1, 1, SadrzajPolja.NISTA, dodatniAtributi);
+		for (int y = 1; y <= visina; y++) {
+			for (int x = 2; x <= sirina; x++) {
 				if (zlatoX == x && zlatoY == y) {
 					addPolje(mapaSvijeta, x, y, SadrzajPolja.ZLATO, dodatniAtributi);
 					continue;
