@@ -299,11 +299,95 @@ public class Agent {
 		}
 	}
 	
+	
 	public void pomakniSe() {
 		if (!zivim) {
 			throw new IllegalStateException("Agent je mrtav :'(");
 		}
+		
+		// trenutna koordinata na kojoj se nalazimo
+		Point koordinata = new Point(pozicija.x, pozicija.y);
+		Point sljedecaKoordinata = new Point();
+		
+		// koordinate polja gore, dolje, lijevo, desno
+		Point koordinataGore = new Point (koordinata.x, koordinata.y+1);
+		Point koordinataDolje = new Point (koordinata.x, koordinata.y-1);
+		Point koordinataLijevo = new Point (koordinata.x-1, koordinata.y);
+		Point koordinataDesno = new Point (koordinata.x+1, koordinata.y);
+		
 		// TODO: Izvedi po prioritetu kretanja. (radi Teta Vedrana)
+		// prvo neposjecena susjedna
+		// zatim neposjecena nesusjedna
+		// vracam koordinate polja kojega posjecujemo u iducem koraku
+		
+				
+	// prvotno susjedna polja !! 
+		for (int i = 0; i <4; i++){
+			
+			Point susjedna = new Point();
+			
+			switch (i) {
+			case 0:
+				susjedna = koordinataGore;				
+				break;
+			case 1:
+				susjedna = koordinataDolje;				
+				break;
+			case 2:
+				susjedna = koordinataLijevo;				
+				break;
+			case 3:
+				susjedna = koordinataDesno;				
+				break;	
+			default:
+				break;
+			}
+			
+			// sigurna i u skupu potencijalnaZlata
+			if (sigurnaNeposjecenaPolja.contains(susjedna) && 
+					potencijalnaZlata.contains(susjedna) &&
+					!smrdljivaPolja.contains(susjedna) &&
+					!vjetrovitaPolja.contains(susjedna)) { 
+				sljedecaKoordinata.x = susjedna.x;
+				sljedecaKoordinata.y = susjedna.y;
+			}		
+			// sigurna i u skupu sjajnih polja
+			else if (sigurnaNeposjecenaPolja.contains(susjedna) &&
+					sjajnaPolja.contains(susjedna) &&
+					!smrdljivaPolja.contains(susjedna) &&
+					!vjetrovitaPolja.contains(susjedna)){
+				sljedecaKoordinata.x = susjedna.x;
+				sljedecaKoordinata.y = susjedna.y;
+			}
+			// samo sigurna, bez propuha i smrada, ali i bez sjaja ili potencijalnog zlata
+			else if (sigurnaNeposjecenaPolja.contains(susjedna) &&
+					!smrdljivaPolja.contains(susjedna) &&
+					!vjetrovitaPolja.contains(susjedna)) {
+				sljedecaKoordinata.x = susjedna.x;
+				sljedecaKoordinata.y = susjedna.y;
+			}
+			//sigurna i u skupu smrdljivih/vjetrovitih, ali i u skupu potencijalnoga zlata 
+			else if (sigurnaNeposjecenaPolja.contains(susjedna) &&
+					potencijalnaZlata.contains(susjedna)) {
+				sljedecaKoordinata.x = susjedna.x;
+				sljedecaKoordinata.y = susjedna.y;
+			}
+			//sigurna i u skupu smrdljivih/vjetrovitih, ali i skupu sjajnih
+			else if (sigurnaNeposjecenaPolja.contains(susjedna) &&
+					sjajnaPolja.contains(susjedna)) {
+				sljedecaKoordinata.x = susjedna.x;
+				sljedecaKoordinata.y = susjedna.y;
+			}		
+		}
+		
+		// nakon toga nesusjedna, iz liste neposjecenih sigurnih, po istom proncipu
+		
+		// a NAKOG TOGA bilo koje iz liste potencijalnih jama ili cudovista
+		
+		// zasad u sljedecaKoordinata zapisujem koordinate novoga polja na koje zelimo ici
+		// pa onda s njima pozivamo daljne funkcije
+		
+		
 		svijet.posjetiPolje(this, 5, 1);
 		
 		promotriOkolis();
@@ -311,7 +395,7 @@ public class Agent {
 	
 	/**
 	 * Mijenjanje pozicije agenta (i obavljanje svih poslova koji se pri
-	 * pomaku moraju obaviti!).<br>
+	 * pomaku moraju obaviti!).<br\>
 	 * Obavezno koristiti ovu metodu, a ne direktno mijenjati poziciju.
 	 * 
 	 * @param x X koordinata pozicije na koju mičemo agenta.
