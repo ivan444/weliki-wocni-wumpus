@@ -42,8 +42,12 @@ public class GeneratorSvijeta {
 		Map<Point, StvarnoPolje> mapaSvijeta = new HashMap<Point, StvarnoPolje>();
 		List<Atributi> dodatniAtributi = new LinkedList<Atributi>();
 		
-		long zlatoX = Math.round(sirina * Math.random());
-		long zlatoY = Math.round(visina * Math.random());
+		long zlatoX;
+		long zlatoY;
+		do {
+			zlatoX = Math.round(sirina * Math.random());
+			zlatoY = Math.round(visina * Math.random());
+		} while (zlatoX <= 1 || zlatoY <= 1);
 		
 		long brPolja = sirina*visina;
 		long brCudovista = Math.round(brPolja*pCudovista);
