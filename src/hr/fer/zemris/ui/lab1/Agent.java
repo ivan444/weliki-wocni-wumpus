@@ -319,7 +319,7 @@ public class Agent implements IAgent {
 		Point koordinataLijevo = new Point (koordinata.x-1, koordinata.y);
 		Point koordinataDesno = new Point (koordinata.x+1, koordinata.y);
 		
-		// TODO: Odaberi sljedece polje po prioritetu kretanja. 
+		// Odaberi sljedece polje po prioritetu kretanja. 
 		//
 		// prvo neposjecena susjedna, sigurna
 		// zatim neposjecena NEsusjedna, sigurna
@@ -465,16 +465,25 @@ public class Agent implements IAgent {
 						sljedecaKoordinata.y = susjedOpasno.y;
 					}					
 					
+					// JAVITI SVIJETU DA SAM PROMIJENIO KOORDINATU
+					// gdje su koordinate novog polja na koje smo se pomaknuli? :D
+					// svijet odlucuje hoce li ubiti agenta
+					
+				
+			
+					
 					// --- VAZNO!!! --- 
 					// kad ode nasumicno na opasno polje - provjeriti je li mrtav !!
 					// ako nije umro, maknuti to dosad opasno polje iz 
 					// liste potencijalnihJama tj. potencijalnihCudovista
 					// ako je umro, sprovod?
+					// je li nasao zlato???
 		}
 				
 			
-		svijet.posjetiPolje(this, 5, 1);
+		svijet.posjetiPolje(this, sljedecaKoordinata.x, sljedecaKoordinata.y);
 		
+				
 		promotriOkolis(); //nakon svakog pomaka ponovno promatra okolis i obogacuje bazu znanja 	
 	}
 	
