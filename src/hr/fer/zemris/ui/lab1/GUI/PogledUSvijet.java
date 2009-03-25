@@ -1,12 +1,15 @@
 package hr.fer.zemris.ui.lab1.GUI;
 
 import hr.fer.zemris.ui.lab1.CentralnaInformacijskaAgencija;
+import hr.fer.zemris.ui.lab1.VisaSila;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -14,11 +17,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 
 public class PogledUSvijet extends JFrame implements IChangeListener {
 	private static final long serialVersionUID = 1L;
@@ -27,9 +31,16 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 	private JTextField txtVisinaSvijeta;
 	private JTextField txtPCudovista;
 	private JTextField txtPJama;
-	private JTextArea txtReport;
+	private JTextPane txtReport;
 	
 	public PogledUSvijet() {
+		addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	CentralnaInformacijskaAgencija.getCIA().ukloniPretplatu(PogledUSvijet.this);
+                dispose();
+            }
+        });
 		initGUI();
 		setTitle("Ultimativno rješenje za traženje zlata i svih zlatnih proizvoda");
 		CentralnaInformacijskaAgencija.getCIA().pretplataNaPoruke(this);
@@ -46,7 +57,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
         } catch (Exception ex) {}
         this.setLocationByPlatform(true);
         this.setSize(800, 600);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		this.getContentPane().setLayout(new BorderLayout());
 		
@@ -126,11 +137,13 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		// KRAJ: Desni dio (stvarni svijet i baza znanja)
 		
 		// POCETAK: Donji dio, ispis rezultata.
-		JPanel donjiDio = new JPanel();
-		this.txtReport = new JTextArea();
-		donjiDio.add(new JScrollPane(this.txtReport));
-		donjiDio.setBorder(BorderFactory.createTitledBorder("Ispis"));
+		JPanel donjiDio = new JPanel(new BorderLayout());
 		donjiDio.setPreferredSize(new Dimension(400, 100));
+		this.txtReport = new JTextPane();
+		this.txtReport.setEditable(false);
+		JScrollPane reportScroll = new JScrollPane(this.txtReport);
+		reportScroll.setBorder(BorderFactory.createTitledBorder("Ispis"));
+		donjiDio.add(reportScroll, BorderLayout.CENTER);
 		this.getContentPane().add(donjiDio, BorderLayout.SOUTH);
 		// KRAJ: Donji dio, ispis rezultata.
 	}
@@ -168,12 +181,12 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 
 	@Override
 	public void interakcija(String informacija) {
-		this.txtReport.append("\n" + informacija);
+		this.txtReport.setText(informacija + "\n" + this.txtReport.getText());
 	}
 
 	@Override
 	public void interakcija() {
-		// TODO Auto-generated method stub
+		VisaSila.get().getAgent().getPozicija();
 		
 	}
 

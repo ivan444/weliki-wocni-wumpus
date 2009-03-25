@@ -49,7 +49,7 @@ public class Svijet {
 		return mapaSvijeta.containsKey(koordinata);
 	}
 
-	public SadrzajPolja posjetiPolje(Agent agent, int x, int y) {
+	public SadrzajPolja posjetiPolje(IAgent agent, int x, int y) {
 		Point koordinata = new Point(x, y);
 		StvarnoPolje polje = mapaSvijeta.get(koordinata);
 		
