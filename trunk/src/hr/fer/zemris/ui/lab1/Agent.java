@@ -98,15 +98,23 @@ public class Agent implements IAgent {
 			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
 				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
 					sigurnaNeposjecenaPolja.add(koordinataGore); 
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataGore.x + ", " + 
+							koordinataGore.y + "]  nalazi se sigurno polje.\n");
 				}
 				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
 					sigurnaNeposjecenaPolja.add(koordinataDolje);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDolje.x + ", " + 
+							koordinataDolje.y + "]  nalazi se sigurno polje.\n");
 				}					
 				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
 					sigurnaNeposjecenaPolja.add(koordinataLijevo);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataLijevo.x + ", " + 
+							koordinataLijevo.y + "]  nalazi se sigurno polje.\n");
 				}				
 				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
 					sigurnaNeposjecenaPolja.add(koordinataDesno);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDesno.x + ", " + 
+							koordinataDesno.y + "]  nalazi se sigurno polje.\n");
 				}						
 		}
 		
@@ -119,18 +127,26 @@ public class Agent implements IAgent {
 				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
 					sigurnaNeposjecenaPolja.add(koordinataGore); 
 					potencijalnaZlata.add(koordinataGore);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataGore.x + ", " + 
+							koordinataGore.y + "]  nalazi se sigurno polje na kojemu je mozda zlato.\n");
 				}
 				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
 					sigurnaNeposjecenaPolja.add(koordinataDolje);
 					potencijalnaZlata.add(koordinataDolje);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDolje.x + ", " + 
+							koordinataDolje.y + "]  nalazi se sigurno polje na kojemu je mozda zlato.\n");
 				}					
 				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
 					sigurnaNeposjecenaPolja.add(koordinataLijevo);
 					potencijalnaZlata.add(koordinataLijevo);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataLijevo.x + ", " + 
+							koordinataLijevo.y + "]  nalazi se sigurno polje na kojemu je mozda zlato.\n");
 				}				
 				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
 					sigurnaNeposjecenaPolja.add(koordinataDesno);
 					potencijalnaZlata.add(koordinataDesno);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDesno.x + ", " + 
+							koordinataDesno.y + "]  nalazi se sigurno polje na kojemu je mozda zlato.\n");
 				}			
 		}
 		
@@ -142,20 +158,24 @@ public class Agent implements IAgent {
 			
 			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
 				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
-					sigurnaNeposjecenaPolja.add(koordinataGore); 
-					potencijalnaCudovista.add(koordinataGore);					
+					potencijalnaCudovista.add(koordinataGore);	
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataGore.x + ", " + 
+							koordinataGore.y + "]  nalazi se polje na kojemu je mozda cudoviste.\n");
 				}
 				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
-					sigurnaNeposjecenaPolja.add(koordinataDolje);
 					potencijalnaCudovista.add(koordinataDolje);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDolje.x + ", " + 
+							koordinataDolje.y + "]  nalazi se polje na kojemu je mozda cudoviste.\n");
 				}					
 				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
-					sigurnaNeposjecenaPolja.add(koordinataLijevo);
 					potencijalnaCudovista.add(koordinataLijevo);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataLijevo.x + ", " + 
+							koordinataLijevo.y + "]  nalazi se polje na kojemu je mozda cudoviste.\n");
 				}				
 				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
-					sigurnaNeposjecenaPolja.add(koordinataDesno);
 					potencijalnaCudovista.add(koordinataDesno);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDesno.x + ", " + 
+							koordinataDesno.y + "]  nalazi se polje na kojemu je mozda cudoviste.\n");
 				}			
 		}
 		
@@ -166,24 +186,28 @@ public class Agent implements IAgent {
 			
 			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
 				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
-					sigurnaNeposjecenaPolja.add(koordinataGore); 
 					potencijalnaCudovista.add(koordinataGore);
-					potencijalnaZlata.add(koordinataGore);					
+					potencijalnaZlata.add(koordinataGore);	
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataGore.x + ", " + 
+							koordinataGore.y + "]  nalazi se polje na kojemu je mozda cudoviste ili zlato.\n");
 				}
 				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
-					sigurnaNeposjecenaPolja.add(koordinataDolje);
 					potencijalnaCudovista.add(koordinataDolje);
 					potencijalnaZlata.add(koordinataDolje);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDolje.x + ", " + 
+							koordinataDolje.y + "]  nalazi se polje na kojemu je mozda cudoviste ili zlato.\n");
 				}					
 				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
-					sigurnaNeposjecenaPolja.add(koordinataLijevo);
 					potencijalnaCudovista.add(koordinataLijevo);
 					potencijalnaZlata.add(koordinataLijevo);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataLijevo.x + ", " + 
+							koordinataLijevo.y + "]  nalazi se polje na kojemu je mozda cudoviste ili zlato.\n");
 				}				
 				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
-					sigurnaNeposjecenaPolja.add(koordinataDesno);
 					potencijalnaCudovista.add(koordinataDesno);
 					potencijalnaZlata.add(koordinataDesno);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDesno.x + ", " + 
+							koordinataDesno.y + "]  nalazi se polje na kojemu je mozda cudoviste ili zlato.\n");
 				}			
 		}
 		
@@ -194,20 +218,24 @@ public class Agent implements IAgent {
 			
 			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
 				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
-					sigurnaNeposjecenaPolja.add(koordinataGore); 
 					potencijalneJame.add(koordinataGore);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataGore.x + ", " + 
+							koordinataGore.y + "]  nalazi se polje na kojemu je mozda jama.\n");
 				}
 				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
-					sigurnaNeposjecenaPolja.add(koordinataDolje);
 					potencijalneJame.add(koordinataDolje);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDolje.x + ", " + 
+							koordinataDolje.y + "]  nalazi se polje na kojemu je mozda jama.\n");
 				}					
 				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
-					sigurnaNeposjecenaPolja.add(koordinataLijevo);
 					potencijalneJame.add(koordinataLijevo);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataLijevo.x + ", " + 
+							koordinataLijevo.y + "]  nalazi se polje na kojemu je mozda jama.\n");
 				}				
 				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
-					sigurnaNeposjecenaPolja.add(koordinataDesno);
 					potencijalneJame.add(koordinataDesno);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDesno.x + ", " + 
+							koordinataDesno.y + "]  nalazi se polje na kojemu je mozda jama.\n");
 				}					
 		}
 		
@@ -218,24 +246,28 @@ public class Agent implements IAgent {
 			
 			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
 				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
-					sigurnaNeposjecenaPolja.add(koordinataGore); 
 					potencijalneJame.add(koordinataGore);
 					potencijalnaZlata.add(koordinataGore);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataGore.x + ", " + 
+							koordinataGore.y + "]  nalazi se polje na kojemu je mozda jama ili zlato.\n");
 				}
 				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
-					sigurnaNeposjecenaPolja.add(koordinataDolje);
 					potencijalneJame.add(koordinataDolje);
 					potencijalnaZlata.add(koordinataDolje);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDolje.x + ", " + 
+							koordinataDolje.y + "]  nalazi se polje na kojemu je mozda jama ili zlato.\n");
 				}					
 				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
-					sigurnaNeposjecenaPolja.add(koordinataLijevo);
 					potencijalneJame.add(koordinataLijevo);
 					potencijalnaZlata.add(koordinataLijevo);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" +  koordinataLijevo.x + ", " + 
+							koordinataLijevo.y + "]  nalazi se polje na kojemu je mozda jama ili zlato.\n");
 				}				
 				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
-					sigurnaNeposjecenaPolja.add(koordinataDesno);
 					potencijalneJame.add(koordinataDesno);
 					potencijalnaZlata.add(koordinataDesno);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDesno.x + ", " + 
+							koordinataDesno.y + "]  nalazi se polje na kojemu je mozda jama ili zlato.\n");
 				}					
 		}
 		
@@ -246,24 +278,28 @@ public class Agent implements IAgent {
 			
 			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
 				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
-					sigurnaNeposjecenaPolja.add(koordinataGore); 
 					potencijalneJame.add(koordinataGore);
 					potencijalnaCudovista.add(koordinataGore);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataGore.x + ", " + 
+							koordinataGore.y + "]  nalazi se polje na kojemu je mozda jama ili cudoviste.\n");
 				}
 				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
-					sigurnaNeposjecenaPolja.add(koordinataDolje);
 					potencijalneJame.add(koordinataDolje);
 					potencijalnaCudovista.add(koordinataDolje);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDolje.x + ", " + 
+							koordinataDolje.y + "]  nalazi se polje na kojemu je mozda jama ili cudoviste.\n");
 				}					
 				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
-					sigurnaNeposjecenaPolja.add(koordinataLijevo);
 					potencijalneJame.add(koordinataLijevo);
 					potencijalnaCudovista.add(koordinataLijevo);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataLijevo.x + ", " + 
+							koordinataLijevo.y + "]  nalazi se polje na kojemu je mozda jama ili cudoviste.\n");
 				}				
 				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
-					sigurnaNeposjecenaPolja.add(koordinataDesno);
 					potencijalneJame.add(koordinataDesno);
 					potencijalnaCudovista.add(koordinataDesno);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDesno.x + ", " + 
+							koordinataDesno.y + "]  nalazi se polje na kojemu je mozda jama ili cudoviste.\n");
 				}					
 		}
 		
@@ -274,28 +310,32 @@ public class Agent implements IAgent {
 			
 			//provjera susjednih neposjecenih i dodavanje u skupove baze znanja
 				if (!posjecenaPolja.contains(koordinataGore) && svijet.postojiPolje(koordinataGore)){
-					sigurnaNeposjecenaPolja.add(koordinataGore); 
 					potencijalneJame.add(koordinataGore);
 					potencijalnaCudovista.add(koordinataGore);
 					potencijalnaZlata.add(koordinataGore);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataGore.x + ", " + 
+							koordinataGore.y + "]  nalazi se polje na kojemu je mozda jama ili cudoviste ili zlato.\n");
 				}
 				if (!posjecenaPolja.contains(koordinataDolje) && svijet.postojiPolje(koordinataDolje)){
-					sigurnaNeposjecenaPolja.add(koordinataDolje);
 					potencijalneJame.add(koordinataDolje);
 					potencijalnaCudovista.add(koordinataDolje);
 					potencijalnaZlata.add(koordinataDolje);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDolje.x + ", " + 
+							koordinataDolje.y + "]  nalazi se polje na kojemu je mozda jama ili cudoviste ili zlato.\n");
 				}					
 				if (!posjecenaPolja.contains(koordinataLijevo) && svijet.postojiPolje(koordinataLijevo)){
-					sigurnaNeposjecenaPolja.add(koordinataLijevo);
 					potencijalneJame.add(koordinataLijevo);
 					potencijalnaCudovista.add(koordinataLijevo);
 					potencijalnaZlata.add(koordinataLijevo);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataLijevo.x + ", " + 
+							koordinataLijevo.y + "]  nalazi se polje na kojemu je mozda jama ili cudoviste ili zlato.\n");
 				}				
 				if (!posjecenaPolja.contains(koordinataDesno) && svijet.postojiPolje(koordinataDesno)){
-					sigurnaNeposjecenaPolja.add(koordinataDesno);
 					potencijalneJame.add(koordinataDesno);
 					potencijalnaCudovista.add(koordinataDesno);
 					potencijalnaZlata.add(koordinataDesno);
+					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na koordinatama [" + koordinataDesno.x + ", " + 
+							koordinataDesno.y + "]  nalazi se polje na kojemu je mozda jama ili cudoviste ili zlato.\n");
 				}					
 		}
 	}
