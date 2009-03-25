@@ -306,6 +306,12 @@ public class Agent implements IAgent {
 			CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Nemoguće. Agent je mrtav.");
 			return;
 		}
+		if (nasaoZlato && pozicija.x == 1 && pozicija.y == 1) {
+			CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Nema potrebe. Imamo zlato!");
+			return;
+		}
+		
+		boolean odabraoPolje = false;
 		
 		// trenutna koordinata na kojoj se nalazimo
 		Point koordinata = new Point(pozicija.x, pozicija.y);
@@ -329,8 +335,8 @@ public class Agent implements IAgent {
 		// ---- Point sljedecaKoordinata ----
 		
 				
-	// prvotno susjedna polja !! 
-		for (int i = 0; i <4; i++){
+	// prvotno susjedna polja !!
+		for (int i = 0; i < 4; i++){
 			
 			Point susjedna = new Point();
 			
@@ -358,6 +364,7 @@ public class Agent implements IAgent {
 					!vjetrovitaPolja.contains(susjedna)) { 
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				odabraoPolje = true;
 				break;
 			}		
 			// sigurna i u skupu sjajnih polja
@@ -367,6 +374,7 @@ public class Agent implements IAgent {
 					!vjetrovitaPolja.contains(susjedna)){
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				odabraoPolje = true;
 				break;
 			}
 			// samo sigurna, bez propuha i smrada, ali i bez sjaja ili potencijalnog zlata
@@ -375,6 +383,7 @@ public class Agent implements IAgent {
 					!vjetrovitaPolja.contains(susjedna)) {
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				odabraoPolje = true;
 				break;
 			}
 			//sigurna i u skupu smrdljivih/vjetrovitih, ali i u skupu potencijalnoga zlata 
@@ -382,6 +391,7 @@ public class Agent implements IAgent {
 					potencijalnaZlata.contains(susjedna)) {
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				odabraoPolje = true;
 				break;
 			}
 			//sigurna i u skupu smrdljivih/vjetrovitih, ali i skupu sjajnih
@@ -389,56 +399,67 @@ public class Agent implements IAgent {
 					sjajnaPolja.contains(susjedna)) {
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				odabraoPolje = true;
 				break;
 			}		
 		}
 		
 		// nakon toga NESUSJEDNA, iz liste neposjecenih sigurnih, po istom principu:
-		
-		for (Point nesusjedna : sigurnaNeposjecenaPolja) {
-			
-			// sigurna i u skupu potencijalnaZlata
-			if (potencijalnaZlata.contains(nesusjedna) &&
-					!smrdljivaPolja.contains(nesusjedna) &&
-					!vjetrovitaPolja.contains(nesusjedna)) { 
-				sljedecaKoordinata.x = nesusjedna.x;
-				sljedecaKoordinata.y = nesusjedna.y;
-				break;
-			}		
-			// sigurna i u skupu sjajnih polja
-			else if (sjajnaPolja.contains(nesusjedna) &&
-					!smrdljivaPolja.contains(nesusjedna) &&
-					!vjetrovitaPolja.contains(nesusjedna)){
-				sljedecaKoordinata.x = nesusjedna.x;
-				sljedecaKoordinata.y = nesusjedna.y;
-				break;
+		if (!odabraoPolje) {
+			for (Point nesusjedna : sigurnaNeposjecenaPolja) {
+				
+				// sigurna i u skupu potencijalnaZlata
+				if (potencijalnaZlata.contains(nesusjedna) &&
+						!smrdljivaPolja.contains(nesusjedna) &&
+						!vjetrovitaPolja.contains(nesusjedna) &&
+						odiNaPolje(nesusjedna.x, nesusjedna.y, false)) {
+					sljedecaKoordinata.x = nesusjedna.x;
+					sljedecaKoordinata.y = nesusjedna.y;
+					odabraoPolje = true;
+					break;
+				}		
+				// sigurna i u skupu sjajnih polja
+				else if (sjajnaPolja.contains(nesusjedna) &&
+						!smrdljivaPolja.contains(nesusjedna) &&
+						!vjetrovitaPolja.contains(nesusjedna) &&
+						odiNaPolje(nesusjedna.x, nesusjedna.y, false)){
+					sljedecaKoordinata.x = nesusjedna.x;
+					sljedecaKoordinata.y = nesusjedna.y;
+					odabraoPolje = true;
+					break;
+				}
+				// samo sigurna, bez propuha i smrada, ali i bez sjaja ili potencijalnog zlata
+				else if (!smrdljivaPolja.contains(nesusjedna) &&
+						!vjetrovitaPolja.contains(nesusjedna) &&
+						odiNaPolje(nesusjedna.x, nesusjedna.y, false)) {
+					sljedecaKoordinata.x = nesusjedna.x;
+					sljedecaKoordinata.y = nesusjedna.y;
+					odabraoPolje = true;
+					break;
+				}
+				//sigurna i u skupu smrdljivih/vjetrovitih, ali i u skupu potencijalnoga zlata 
+				else if (potencijalnaZlata.contains(nesusjedna) &&
+						odiNaPolje(nesusjedna.x, nesusjedna.y, false)) {
+					sljedecaKoordinata.x = nesusjedna.x;
+					sljedecaKoordinata.y = nesusjedna.y;
+					odabraoPolje = true;
+					break;
+				}
+				//sigurna i u skupu smrdljivih/vjetrovitih, ali i skupu sjajnih
+				else if (sjajnaPolja.contains(nesusjedna) && odiNaPolje(nesusjedna.x, nesusjedna.y, false)) {
+					sljedecaKoordinata.x = nesusjedna.x;
+					sljedecaKoordinata.y = nesusjedna.y;
+					odabraoPolje = true;
+					break;
+				}			
 			}
-			// samo sigurna, bez propuha i smrada, ali i bez sjaja ili potencijalnog zlata
-			else if (!smrdljivaPolja.contains(nesusjedna) &&
-					!vjetrovitaPolja.contains(nesusjedna)) {
-				sljedecaKoordinata.x = nesusjedna.x;
-				sljedecaKoordinata.y = nesusjedna.y;
-				break;
-			}
-			//sigurna i u skupu smrdljivih/vjetrovitih, ali i u skupu potencijalnoga zlata 
-			else if (potencijalnaZlata.contains(nesusjedna)) {
-				sljedecaKoordinata.x = nesusjedna.x;
-				sljedecaKoordinata.y = nesusjedna.y;
-				break;
-			}
-			//sigurna i u skupu smrdljivih/vjetrovitih, ali i skupu sjajnih
-			else if (sjajnaPolja.contains(nesusjedna)) {
-				sljedecaKoordinata.x = nesusjedna.x;
-				sljedecaKoordinata.y = nesusjedna.y;
-				break;
-			}			
-		} 
+		}
 		
 				
 		// a ako ni sada nismo nasli sigurno polje, agent odlazi na
 		// bilo koje polje iz liste potencijalnih jama ili cudovista
 		
-		for (int i = 0; i <4; i++){
+		for (int i = 0; i < 4 && !odabraoPolje; i++){
 					
 					Point susjedOpasno = new Point();
 					
@@ -463,6 +484,7 @@ public class Agent implements IAgent {
 							(potencijalnaCudovista.contains(susjedOpasno) || potencijalneJame.contains(susjedOpasno))) {
 						sljedecaKoordinata.x = susjedOpasno.x;
 						sljedecaKoordinata.y = susjedOpasno.y;
+						odabraoPolje = true;
 					}					
 					
 					// JAVITI SVIJETU DA SAM PROMIJENIO KOORDINATU
@@ -482,9 +504,9 @@ public class Agent implements IAgent {
 				
 			
 		svijet.posjetiPolje(this, sljedecaKoordinata.x, sljedecaKoordinata.y);
-		
+		promijeniPoziciju(sljedecaKoordinata.x, sljedecaKoordinata.y);
 				
-		promotriOkolis(); //nakon svakog pomaka ponovno promatra okolis i obogacuje bazu znanja 	
+		promotriOkolis(); // nakon svakog pomaka ponovno promatra okolis i obogacuje bazu znanja 	
 	}
 	
 	/**
@@ -509,21 +531,24 @@ public class Agent implements IAgent {
 	 * 
 	 * @param x X koordinata polja na koje želimo pomaknuti agenta.
 	 * @param y Y koordinata polja na koje želimo pomaknuti agenta.
-	 * @return True ako se agent uspješno pomaknuo na točku ({@code x}, {@code y}).
+	 * @param pomakniSe Pomakni agenta (true) ili samo javi može li se pomaknuti (false).
+	 * @return True ako agent može pristupiti točki ({@code x}, {@code y}).
 	 */
-	private boolean odiNaPolje(int x, int y) {
+	private boolean odiNaPolje(int x, int y, boolean pomakniSe) {
 		List<Point> put = new LinkedList<Point>();
 		Set<Point> posjecene = new HashSet<Point>();
 		
 		Point odrediste = new Point(x, y);
 		if (izgradnjaPuta(pozicija.x, pozicija.y, odrediste, put, posjecene)) {
-			for (Point p : put) {
-				promijeniPoziciju(p.x, p.y);
+			if (pomakniSe) {
+				for (Point p : put) {
+					promijeniPoziciju(p.x, p.y);
+				}
 			}
-			return false;
+			return true;
 			
 		} else {
-			return true;
+			return false;
 		}
 	}
 	
@@ -601,7 +626,6 @@ public class Agent implements IAgent {
 	public void ubij() {
 		this.zivim = false;
 		CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Agent je mrtav");
-		CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();
 	}
 
 	public boolean isZivim() {

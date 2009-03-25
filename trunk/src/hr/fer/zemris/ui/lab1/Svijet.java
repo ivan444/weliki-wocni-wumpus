@@ -44,15 +44,20 @@ public class Svijet {
 	 * Postoji li polje u svijetu.
 	 * 
 	 * @param koordinata
-	 * @return
+	 * @return True ako polje postoji.
 	 */
 	public boolean postojiPolje(Point koordinata) {
 		return mapaSvijeta.containsKey(koordinata);
 	}
-
+	
 	public SadrzajPolja posjetiPolje(IAgent agent, int x, int y) {
 		Point koordinata = new Point(x, y);
+		
 		StvarnoPolje polje = mapaSvijeta.get(koordinata);
+		if (polje == null) {
+			// Ovo se nikad ne bi trebalo dogoditi
+			return SadrzajPolja.IMAGINARNO_POLJE;
+		}
 		
 		if (polje.getTip().equals(SadrzajPolja.CUDOVISTE)
 				|| polje.getTip().equals(SadrzajPolja.JAMA)) {

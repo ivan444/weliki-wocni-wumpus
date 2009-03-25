@@ -29,20 +29,22 @@ public class VisaSila {
 	
 	/**
 	 * Pokretanje i inicijalizacija aplikacije te stvaranje početnog svijeta.
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		String msg = null;
 		try {
-			VisaSila.get().stvoriSvijet(20, 10, 0.1, 0.1);
+			VisaSila.get().stvoriSvijet(5, 5, 0.1, 0.1);
 		} catch (IllegalArgumentException e) {
 			msg = e.getMessage();
 		}
 		
 		PogledUSvijet.open();
-		
+		Thread.sleep(1000);
 		if (msg != null) {
 			CentralnaInformacijskaAgencija.getCIA().dodajPoruku(msg);
 		}
+		CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();
 	}
 	
 	/** Pomoćna privatna klasa za konstrukciju singleton razreda. */
