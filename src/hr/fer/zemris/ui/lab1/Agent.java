@@ -40,7 +40,7 @@ public class Agent {
 		this.svijet = svijet;
 		this.zivim = true;
 		this.nasaoZlato = false;
-		this.pozicija = new Point(1,1);
+		promijeniPoziciju(1, 1);
 		promotriOkolis();
 	}
 	
@@ -395,7 +395,7 @@ public class Agent {
 	
 	/**
 	 * Mijenjanje pozicije agenta (i obavljanje svih poslova koji se pri
-	 * pomaku moraju obaviti!).<br\>
+	 * pomaku moraju obaviti!).<br\> (btw. komentari ne moraju biti XHTML valid ;D)
 	 * Obavezno koristiti ovu metodu, a ne direktno mijenjati poziciju.
 	 * 
 	 * @param x X koordinata pozicije na koju mičemo agenta.
@@ -403,7 +403,7 @@ public class Agent {
 	 */
 	private void promijeniPoziciju(int x, int y) {
 		this.pozicija.setLocation(x, y);
-		// TODO: obavijesti sve o promjeni...
+		CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();
 	}
 	
 	public Point getPozicija() {
@@ -506,5 +506,7 @@ public class Agent {
 	
 	public void ubij() {
 		this.zivim = false;
+		CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Agent je mrtav");
+		CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();
 	}
 }
