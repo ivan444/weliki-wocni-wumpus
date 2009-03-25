@@ -307,6 +307,8 @@ public class Agent {
 		
 		// trenutna koordinata na kojoj se nalazimo
 		Point koordinata = new Point(pozicija.x, pozicija.y);
+		
+		// koordinate polja na koje cemo se pomaknuti
 		Point sljedecaKoordinata = new Point();
 		
 		// koordinate polja gore, dolje, lijevo, desno
@@ -315,10 +317,14 @@ public class Agent {
 		Point koordinataLijevo = new Point (koordinata.x-1, koordinata.y);
 		Point koordinataDesno = new Point (koordinata.x+1, koordinata.y);
 		
-		// TODO: Izvedi po prioritetu kretanja. (radi Teta Vedrana)
-		// prvo neposjecena susjedna
-		// zatim neposjecena nesusjedna
-		// vracam koordinate polja kojega posjecujemo u iducem koraku
+		// TODO: Odaberi sljedece polje po prioritetu kretanja. 
+		//
+		// prvo neposjecena susjedna, sigurna
+		// zatim neposjecena NEsusjedna, sigurna
+		// zatim neposjecena nesigurna :(
+		//
+		// postavlja koordinate polja kojega agent posjecuje u iducem koraku u tocku
+		// ---- Point sljedecaKoordinata ----
 		
 				
 	// prvotno susjedna polja !! 
@@ -350,6 +356,7 @@ public class Agent {
 					!vjetrovitaPolja.contains(susjedna)) { 
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				break;
 			}		
 			// sigurna i u skupu sjajnih polja
 			else if (sigurnaNeposjecenaPolja.contains(susjedna) &&
@@ -358,6 +365,7 @@ public class Agent {
 					!vjetrovitaPolja.contains(susjedna)){
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				break;
 			}
 			// samo sigurna, bez propuha i smrada, ali i bez sjaja ili potencijalnog zlata
 			else if (sigurnaNeposjecenaPolja.contains(susjedna) &&
@@ -365,32 +373,107 @@ public class Agent {
 					!vjetrovitaPolja.contains(susjedna)) {
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				break;
 			}
 			//sigurna i u skupu smrdljivih/vjetrovitih, ali i u skupu potencijalnoga zlata 
 			else if (sigurnaNeposjecenaPolja.contains(susjedna) &&
 					potencijalnaZlata.contains(susjedna)) {
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				break;
 			}
 			//sigurna i u skupu smrdljivih/vjetrovitih, ali i skupu sjajnih
 			else if (sigurnaNeposjecenaPolja.contains(susjedna) &&
 					sjajnaPolja.contains(susjedna)) {
 				sljedecaKoordinata.x = susjedna.x;
 				sljedecaKoordinata.y = susjedna.y;
+				break;
 			}		
 		}
 		
-		// nakon toga nesusjedna, iz liste neposjecenih sigurnih, po istom proncipu
+		// nakon toga NESUSJEDNA, iz liste neposjecenih sigurnih, po istom principu:
 		
-		// a NAKOG TOGA bilo koje iz liste potencijalnih jama ili cudovista
+		for (Point nesusjedna : sigurnaNeposjecenaPolja) {
+			
+			// sigurna i u skupu potencijalnaZlata
+			if (potencijalnaZlata.contains(nesusjedna) &&
+					!smrdljivaPolja.contains(nesusjedna) &&
+					!vjetrovitaPolja.contains(nesusjedna)) { 
+				sljedecaKoordinata.x = nesusjedna.x;
+				sljedecaKoordinata.y = nesusjedna.y;
+				break;
+			}		
+			// sigurna i u skupu sjajnih polja
+			else if (sjajnaPolja.contains(nesusjedna) &&
+					!smrdljivaPolja.contains(nesusjedna) &&
+					!vjetrovitaPolja.contains(nesusjedna)){
+				sljedecaKoordinata.x = nesusjedna.x;
+				sljedecaKoordinata.y = nesusjedna.y;
+				break;
+			}
+			// samo sigurna, bez propuha i smrada, ali i bez sjaja ili potencijalnog zlata
+			else if (!smrdljivaPolja.contains(nesusjedna) &&
+					!vjetrovitaPolja.contains(nesusjedna)) {
+				sljedecaKoordinata.x = nesusjedna.x;
+				sljedecaKoordinata.y = nesusjedna.y;
+				break;
+			}
+			//sigurna i u skupu smrdljivih/vjetrovitih, ali i u skupu potencijalnoga zlata 
+			else if (potencijalnaZlata.contains(nesusjedna)) {
+				sljedecaKoordinata.x = nesusjedna.x;
+				sljedecaKoordinata.y = nesusjedna.y;
+				break;
+			}
+			//sigurna i u skupu smrdljivih/vjetrovitih, ali i skupu sjajnih
+			else if (sjajnaPolja.contains(nesusjedna)) {
+				sljedecaKoordinata.x = nesusjedna.x;
+				sljedecaKoordinata.y = nesusjedna.y;
+				break;
+			}			
+		} 
 		
-		// zasad u sljedecaKoordinata zapisujem koordinate novoga polja na koje zelimo ici
-		// pa onda s njima pozivamo daljne funkcije
+				
+		// a ako ni sada nismo nasli sigurno polje, agent odlazi na
+		// bilo koje polje iz liste potencijalnih jama ili cudovista
 		
-		
+		for (int i = 0; i <4; i++){
+					
+					Point susjedOpasno = new Point();
+					
+					switch (i) {
+					case 0:
+						susjedOpasno = koordinataGore;				
+						break;
+					case 1:
+						susjedOpasno = koordinataDolje;				
+						break;
+					case 2:
+						susjedOpasno = koordinataLijevo;				
+						break;
+					case 3:
+						susjedOpasno = koordinataDesno;				
+						break;	
+					default:
+						break;
+					}
+					
+					if (svijet.postojiPolje(susjedOpasno) && 
+							(potencijalnaCudovista.contains(susjedOpasno) || potencijalneJame.contains(susjedOpasno))) {
+						sljedecaKoordinata.x = susjedOpasno.x;
+						sljedecaKoordinata.y = susjedOpasno.y;
+					}					
+					
+					// --- VAZNO!!! --- 
+					// kad ode nasumicno na opasno polje - provjeriti je li mrtav !!
+					// ako nije umro, maknuti to dosad opasno polje iz 
+					// liste potencijalnihJama tj. potencijalnihCudovista
+					// ako je umro, sprovod?
+		}
+				
+			
 		svijet.posjetiPolje(this, 5, 1);
 		
-		promotriOkolis();
+		promotriOkolis(); //nakon svakog pomaka ponovno promatra okolis i obogacuje bazu znanja 	
 	}
 	
 	/**
