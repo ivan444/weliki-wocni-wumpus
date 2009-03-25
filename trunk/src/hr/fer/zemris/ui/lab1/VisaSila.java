@@ -28,11 +28,21 @@ public class VisaSila {
 	}
 	
 	/**
-	 * Inicijalizacija aplikacije i stvaranje početnog svijeta.
+	 * Pokretanje i inicijalizacija aplikacije te stvaranje početnog svijeta.
 	 */
 	public static void main(String[] args) {
-		VisaSila.get().stvoriSvijet(20, 10, 0.1, 0.1);
+		String msg = null;
+		try {
+			VisaSila.get().stvoriSvijet(20, 10, 0.1, 0.1);
+		} catch (IllegalArgumentException e) {
+			msg = e.getMessage();
+		}
+		
 		PogledUSvijet.open();
+		
+		if (msg != null) {
+			CentralnaInformacijskaAgencija.getCIA().dodajPoruku(msg);
+		}
 	}
 	
 	/** Pomoćna privatna klasa za konstrukciju singleton razreda. */

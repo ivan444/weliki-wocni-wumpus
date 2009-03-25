@@ -303,7 +303,8 @@ public class Agent implements IAgent {
 	
 	public void pomakniSe() {
 		if (!zivim) {
-			throw new IllegalStateException("Agent je mrtav :'(");
+			CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Nemoguće. Agent je mrtav.");
+			return;
 		}
 		
 		// trenutna koordinata na kojoj se nalazimo
