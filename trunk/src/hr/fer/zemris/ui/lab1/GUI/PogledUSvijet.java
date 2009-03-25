@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -146,8 +147,8 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		prikaziNoviSvijet();
 		
 		// POCETAK: Sredina (agentov pogled)
-		JPanel sredina = new JPanel();
-		sredina.add(agentovPogled);
+		JPanel sredina = new JPanel(new BorderLayout());
+		sredina.add(agentovPogled, BorderLayout.CENTER);
 		getContentPane().add(sredina, BorderLayout.CENTER);
 		// KRAJ: Sredina (agentov pogled)
 		
@@ -172,6 +173,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		this.getContentPane().add(donjiDio, BorderLayout.SOUTH);
 		// KRAJ: Donji dio, ispis rezultata.
 		
+		pack();
 		predefiniraneVrijednosti();
 		svijetJeSpreman = true;
 	}
@@ -211,7 +213,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 					opisStr += "Sm";
 				}
 				if (!opisStr.equals("")) {
-					agentovPogled.add(new JLabel(opisStr));
+					agentovPogled.add(new JLabel(opisStr, SwingConstants.CENTER));
 					apOpisano = true;
 				}
 				if (!apOpisano) {
@@ -231,7 +233,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 						opisStr += "PZl";
 					}
 					if (!opisStr.equals("")) {
-						agentovPogled.add(new JLabel(opisStr));
+						agentovPogled.add(new JLabel(opisStr, SwingConstants.CENTER));
 						apOpisano = true;
 					}
 					
@@ -256,7 +258,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 					break;
 					
 				default:
-					stvarniPogled.add(new JLabel(new ImageIcon("slike/upitnik.png")));
+					stvarniPogled.add(new JLabel(new ImageIcon("slike/tocka.png")));
 					break;
 				}
 				
@@ -284,7 +286,8 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 					poljeAp.setIcon(new ImageIcon("slike/agent.png"));
 					continue;
 				}
-				
+				poljeAp.setIcon(null);
+				poljeAp.setText("");
 				String opisStr = "";
 				apOpisano = false;
 				AgentPolje ap = VisaSila.get().getAgent().opisiPolje(new Point(x, y));
@@ -310,18 +313,19 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 						poljeAp.setIcon(new ImageIcon("slike/upitnik.png"));
 						apOpisano = true;
 						
-					} else if (ap.isPotencijalnoCudoviste()) {
-						opisStr += "PCu";
-					} else if (ap.isPotencijalnaJama()) {
-						opisStr += "PJa";
-					} else if (ap.isPotencijalnoZlato()) {
-						opisStr += "PZl";
+					} else {
+						if (ap.isPotencijalnoCudoviste()) {
+							opisStr += "PCu";
+						} else if (ap.isPotencijalnaJama()) {
+							opisStr += "PJa";
+						} else if (ap.isPotencijalnoZlato()) {
+							opisStr += "PZl";
+						}
+						if (!opisStr.equals("")) {
+							poljeAp.setText(opisStr);
+							apOpisano = true;
+						}
 					}
-					if (!opisStr.equals("")) {
-						poljeAp.setText(opisStr);
-						apOpisano = true;
-					}
-					
 					if (!apOpisano) {
 						poljeAp.setIcon(new ImageIcon("slike/upitnik.png"));
 						apOpisano = true;
@@ -343,7 +347,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 					break;
 					
 				default:
-					polje.setIcon(new ImageIcon("slike/upitnik.png"));
+					polje.setIcon(new ImageIcon("slike/tocka.png"));
 					break;
 				}
 				
