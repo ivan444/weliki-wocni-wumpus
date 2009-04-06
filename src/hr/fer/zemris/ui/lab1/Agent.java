@@ -41,7 +41,7 @@ public class Agent implements IAgent {
 		this.zivim = true;
 		this.nasaoZlato = false;
 		this.pozicija = new Point();
-		promijeniPoziciju(1, 1);
+		promijeniPoziciju(1, 1, false);
 		promotriOkolis();
 	}
 	
@@ -551,7 +551,7 @@ public class Agent implements IAgent {
 			
 		SadrzajPolja sadrzaj = svijet.posjetiPolje(this, sljedecaKoordinata.x, sljedecaKoordinata.y);
 				
-		promijeniPoziciju(sljedecaKoordinata.x, sljedecaKoordinata.y);
+		promijeniPoziciju(sljedecaKoordinata.x, sljedecaKoordinata.y, true);
 		
 		if (sadrzaj.equals(SadrzajPolja.ZLATO)) {
 			nasaoZlato = true;
@@ -567,10 +567,13 @@ public class Agent implements IAgent {
 	 * 
 	 * @param x X koordinata pozicije na koju mičemo agenta.
 	 * @param y Y koordinata pozicije na koju mičemo agenta.
+	 * @param obavijesti True ako želimo obavijestiti o promjeni.
 	 */
-	private void promijeniPoziciju(int x, int y) {
+	private void promijeniPoziciju(int x, int y, boolean obavijesti) {
 		this.pozicija.setLocation(x, y);
-		CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();
+		if (obavijesti) {
+			CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();
+		}
 	}
 	
 	public Point getPozicija() {
@@ -593,7 +596,7 @@ public class Agent implements IAgent {
 		if (izgradnjaPuta(pozicija.x, pozicija.y, odrediste, put, posjecene)) {
 			if (pomakniSe) {
 				for (Point p : put) {
-					promijeniPoziciju(p.x, p.y);
+					promijeniPoziciju(p.x, p.y, true);
 				}
 			}
 			return true;
