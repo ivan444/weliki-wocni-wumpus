@@ -26,7 +26,7 @@ public class Agent implements IAgent {
 	/**
 	 * Konstruktor.
 	 * 
-	 * @param svijet Svijet u kojem agent jest.
+	 * @param svijet Svijet u kojemu agent jest.
 	 */
 	public Agent(Svijet svijet) {
 		posjecenaPolja = new HashSet<Point>();
@@ -46,49 +46,19 @@ public class Agent implements IAgent {
 	}
 	
 	/**
-	 * Prikupljanje znanja o okolini.
+	 * Prikupljanje znanja o okolini na temelju 
+	 * znanja o polju na kojemu se agent nalazi.
 	 */
 	private void promotriOkolis() {
 		posjecenaPolja.add(pozicija);
-		Point koordinata;
-		
-	
-		// promatra sva neposjecena polja oko onoga na kojemu se 
-		// trenutno nalazi (ako postoje)
-		
-		// desno
-		koordinata = new Point(pozicija.x+1, pozicija.y);
-		if (!posjecenaPolja.contains(koordinata)
-				&& svijet.postojiPolje(koordinata)) {
-			zabiljezi(koordinata);
-		}
-		
-		//lijevo
-		koordinata = new Point(pozicija.x-1, pozicija.y);
-		if (!posjecenaPolja.contains(koordinata)
-				&& svijet.postojiPolje(koordinata)) {
-			zabiljezi(koordinata);
-		}
-		
-		//gore
-		koordinata = new Point(pozicija.x, pozicija.y+1);
-		if (!posjecenaPolja.contains(koordinata)
-				&& svijet.postojiPolje(koordinata)) {
-			zabiljezi(koordinata);
-		}
-		
-		//dolje
-		koordinata = new Point(pozicija.x, pozicija.y-1);
-		if (!posjecenaPolja.contains(koordinata)
-				&& svijet.postojiPolje(koordinata)) {
-			zabiljezi(koordinata);
-		}
+		Point koordinata = new Point(pozicija.x, pozicija.y);
+		zabiljezi(koordinata);	
 	}
 	
 	/**
 	 * Zapisivanje obiljezja polja - obogacivanje baze znanja.
 	 * 
-	 * @param koordinata Koordinata polja na kojem se agent trenutno nalazi.
+	 * @param koordinata Koordinata polja koje agent promatra.
 	 */
 	private void zabiljezi(Point koordinata) {
 		
