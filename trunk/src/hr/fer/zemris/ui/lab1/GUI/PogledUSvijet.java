@@ -41,6 +41,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 	private JTextPane txtBazaZnanja;
 	private JPanel agentovPogled;
 	private JPanel stvarniPogled;
+	private JPanel desniDio;
 	private boolean svijetJeSpreman;
 	
 	public PogledUSvijet() {
@@ -105,7 +106,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		JButton newWorld = new JButton(new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//newWorld();
+				stvoriNoviSvijet();
 			}
 		});
 		newWorld.setText("Novi svijet");
@@ -142,26 +143,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		parametri.add(vjerojatnostiParam);
 		this.getContentPane().add(parametri, BorderLayout.WEST);
 		// KRAJ: Lijevi izbornik (parametri)
-		
-		
-		prikaziNoviSvijet();
-		
-		// POCETAK: Sredina (agentov pogled)
-		JPanel sredina = new JPanel(new BorderLayout());
-		sredina.add(agentovPogled, BorderLayout.CENTER);
-		getContentPane().add(sredina, BorderLayout.CENTER);
-		// KRAJ: Sredina (agentov pogled)
-		
-		// POCETAK: Desni dio (stvarni svijet i baza znanja)
-		JPanel desniDio = new JPanel(new GridLayout(2,1));
-		desniDio.add(stvarniPogled);
-		txtBazaZnanja = new JTextPane();
-		txtBazaZnanja.setEditable(false);
-		txtBazaZnanja.setPreferredSize(new Dimension(150, 150));
-		desniDio.add(new JScrollPane(txtBazaZnanja));
-		this.getContentPane().add(desniDio, BorderLayout.EAST);
-		// KRAJ: Desni dio (stvarni svijet i baza znanja)
-		
+
 		// POCETAK: Donji dio, ispis rezultata.
 		JPanel donjiDio = new JPanel(new BorderLayout());
 		donjiDio.setPreferredSize(new Dimension(400, 100));
@@ -171,23 +153,75 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		reportScroll.setBorder(BorderFactory.createTitledBorder("Ispis"));
 		donjiDio.add(reportScroll, BorderLayout.CENTER);
 		this.getContentPane().add(donjiDio, BorderLayout.SOUTH);
+		predefiniraneVrijednosti();
 		// KRAJ: Donji dio, ispis rezultata.
 		
+		prikaziNoviSvijet();
+		
+		// POCETAK: Sredina (agentov pogled)
+//		JPanel sredina = new JPanel(new BorderLayout());
+//		sredina.add(agentovPogled, BorderLayout.CENTER);
+//		getContentPane().add(agentovPogled, BorderLayout.CENTER);
+		// KRAJ: Sredina (agentov pogled)
+		
+//		// POCETAK: Desni dio (stvarni svijet i baza znanja)
+//		JPanel desniDio = new JPanel(new GridLayout(2,1));
+//		desniDio.add(stvarniPogled);
+//		txtBazaZnanja = new JTextPane();
+//		txtBazaZnanja.setEditable(false);
+//		txtBazaZnanja.setPreferredSize(new Dimension(150, 150));
+//		desniDio.add(new JScrollPane(txtBazaZnanja));
+//		this.getContentPane().add(desniDio, BorderLayout.EAST);
+//		// KRAJ: Desni dio (stvarni svijet i baza znanja)
+		
 		pack();
-		predefiniraneVrijednosti();
 		svijetJeSpreman = true;
 	}
 	
 	private void predefiniraneVrijednosti() {
 		txtPCudovista.setText("0.25");
 		txtPJama.setText("0.15");
-		txtSirinaSvijeta.setText("10");
-		txtVisinaSvijeta.setText("20");
+		txtSirinaSvijeta.setText("5");
+		txtVisinaSvijeta.setText("5");
+	}
+	
+	private boolean stvoriNoviSvijet() {
+		int apSirina;
+		int apVisina;
+		try {
+			apSirina = Integer.parseInt(txtSirinaSvijeta.getText());
+			apVisina = Integer.parseInt(txtVisinaSvijeta.getText());
+		} catch (NumberFormatException ne) {
+			txtReport.setText(txtReport.getText() + "\nNeispravan unos visine ili širine!");
+			return false;
+		}
+		
+		double pCudovista;
+		double pJama;
+		try {
+			pCudovista = Double.parseDouble(txtPCudovista.getText());
+			pJama = Double.parseDouble(txtPJama.getText());
+		} catch (NumberFormatException ne) {
+			txtReport.setText(txtReport.getText() + "\nNeispravan unos visine ili širine!");
+			return false;
+		}
+		
+		VisaSila.get().stvoriSvijet(apSirina, apVisina, pCudovista, pJama);
+		prikaziNoviSvijet();
+		
+		return true;
 	}
 	
 	private void prikaziNoviSvijet() {
+		if (agentovPogled != null) {
+			getContentPane().remove(agentovPogled);
+		}
+		if (desniDio != null) {
+			getContentPane().remove(desniDio);
+		}
 		int apSirina = VisaSila.get().getSvijet().getVelicinaSvijeta().width;
 		int apVisina = VisaSila.get().getSvijet().getVelicinaSvijeta().height;
+		
 		agentovPogled = new JPanel(new GridLayout(apVisina, apSirina, 0, 0));
 		stvarniPogled = new JPanel(new GridLayout(apVisina, apSirina, 0, 0));
 		Point agentPoz = VisaSila.get().getAgent().getPozicija();
@@ -264,6 +298,23 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 				
 			}
 		}
+		
+		getContentPane().add(agentovPogled, BorderLayout.CENTER);
+		
+		desniDio = new JPanel(new GridLayout(2,1));
+		desniDio.add(stvarniPogled);
+		txtBazaZnanja = new JTextPane();
+		txtBazaZnanja.setEditable(false);
+		txtBazaZnanja.setPreferredSize(new Dimension(150, 150));
+		desniDio.add(new JScrollPane(txtBazaZnanja));
+		this.getContentPane().add(desniDio, BorderLayout.EAST);
+		
+		//stvarniPogled.repaint();
+		//agentovPogled.repaint();
+		//desniDio.repaint();
+		desniDio.revalidate();
+		agentovPogled.revalidate();
+		//stvarniPogled.revalidate();
 	}
 	
 	private void prikaziPromijenjeniSvijet() {
@@ -354,6 +405,8 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 			}
 		}
 		stvarniPogled.repaint();
+		agentovPogled.repaint();
+		
 	}
 
 	private void start() {
@@ -369,26 +422,6 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		// TODO Auto-generated method stub
 		
 	}
-	
-//	private void newWorld() {
-//		svijetJeSpreman = false;
-//		int sirina;
-//		int visina;
-//		double pCudovista;
-//		double pJama;
-//		try {
-//			sirina = Integer.parseInt(txtSirinaSvijeta.getText());
-//			visina = Integer.parseInt(txtVisinaSvijeta.getText());
-//			pCudovista = Double.parseDouble(txtPCudovista.getText());
-//			pJama = Double.parseDouble(txtPJama.getText());
-//		} catch (NumberFormatException e) {
-//			CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Neispravni parametri!");
-//			return;
-//		}
-//		VisaSila.get().stvoriSvijet(sirina, visina, pCudovista, pJama);
-//		prikaziNoviSvijet();
-//		svijetJeSpreman = true;
-//	}
 	
 	/**
 	 * Pokretanje GUI-a.
