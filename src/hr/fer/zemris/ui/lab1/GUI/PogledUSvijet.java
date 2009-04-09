@@ -25,11 +25,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+/**
+ * Prikaz svijeta.
+ */
 public class PogledUSvijet extends JFrame implements IChangeListener {
 	private static final long serialVersionUID = 1L;
 	
@@ -178,6 +180,9 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		svijetJeSpreman = true;
 	}
 	
+	/**
+	 * Postavljanje predefiniranih vrijednosti za stvaranje novog svijeta.
+	 */
 	private void predefiniraneVrijednosti() {
 		txtPCudovista.setText("0.25");
 		txtPJama.setText("0.15");
@@ -185,14 +190,20 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		txtVisinaSvijeta.setText("5");
 	}
 	
+	/**
+	 * Stvaranje novog svijeta.
+	 * 
+	 * @return True ako je svijet stvoren, inače false.
+	 */
 	private boolean stvoriNoviSvijet() {
+		this.svijetJeSpreman = false;
 		int apSirina;
 		int apVisina;
 		try {
 			apSirina = Integer.parseInt(txtSirinaSvijeta.getText());
 			apVisina = Integer.parseInt(txtVisinaSvijeta.getText());
 		} catch (NumberFormatException ne) {
-			txtReport.setText(txtReport.getText() + "\nNeispravan unos visine ili širine!");
+			interakcija("Neispravan unos visine ili širine!");
 			return false;
 		}
 		
@@ -202,12 +213,14 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 			pCudovista = Double.parseDouble(txtPCudovista.getText());
 			pJama = Double.parseDouble(txtPJama.getText());
 		} catch (NumberFormatException ne) {
-			txtReport.setText(txtReport.getText() + "\nNeispravan unos visine ili širine!");
+			interakcija("Neispravan unos postotka čudovišta ili jama!");
 			return false;
 		}
 		
 		VisaSila.get().stvoriSvijet(apSirina, apVisina, pCudovista, pJama);
 		prikaziNoviSvijet();
+		
+		this.svijetJeSpreman = true;
 		
 		return true;
 	}
@@ -225,77 +238,15 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		agentovPogled = new JPanel(new GridLayout(apVisina, apSirina, 0, 0));
 		stvarniPogled = new JPanel(new GridLayout(apVisina, apSirina, 0, 0));
 		Point agentPoz = VisaSila.get().getAgent().getPozicija();
-		boolean apOpisano = false;
 		for (int y = 1; y <= apVisina; y++) {
 			for (int x = 1; x <= apSirina; x++) {
-				if (x == agentPoz.x && y == agentPoz.y) {
-					agentovPogled.add(new JLabel(new ImageIcon("slike/agent.png")));
-					stvarniPogled.add(new JLabel(new ImageIcon("slike/agent.png")));
-					continue;
-				}
+				JLabel polje = new JLabel();
+				JLabel poljeAp = new JLabel();
 				
-				String opisStr = "";
-				apOpisano = false;
-				AgentPolje ap = VisaSila.get().getAgent().opisiPolje(new Point(x, y));
-				if (ap.isVjetrovito()) {
-					opisStr += "Vj";
-				}
-				if (ap.isSjajno()) {
-					opisStr += "Sj";
-				}
-				if (ap.isSmrdljivo()) {
-					opisStr += "Sm";
-				}
-				if (!opisStr.equals("")) {
-					agentovPogled.add(new JLabel(opisStr, SwingConstants.CENTER));
-					apOpisano = true;
-				}
-				if (!apOpisano) {
-					if (ap.isPosjeceno()) {
-						agentovPogled.add(new JLabel(new ImageIcon("slike/tocka.png")));
-						apOpisano = true;
-						
-					} else if (ap.isSigurnoNeposjeceno()) {
-						agentovPogled.add(new JLabel(new ImageIcon("slike/upitnik.png")));
-						apOpisano = true;
-						
-					} else if (ap.isPotencijalnoCudoviste()) {
-						opisStr += "PCu";
-					} else if (ap.isPotencijalnaJama()) {
-						opisStr += "PJa";
-					} else if (ap.isPotencijalnoZlato()) {
-						opisStr += "PZl";
-					}
-					if (!opisStr.equals("")) {
-						agentovPogled.add(new JLabel(opisStr, SwingConstants.CENTER));
-						apOpisano = true;
-					}
-					
-					if (!apOpisano) {
-						agentovPogled.add(new JLabel(new ImageIcon("slike/upitnik.png")));
-						apOpisano = true;
-					}
-				}
+				postaviSlike(x, y, agentPoz, polje, poljeAp);
 				
-				SadrzajPolja sadrzaj = VisaSila.get().opisiPolje(x, y);
-				switch (sadrzaj) {
-				case CUDOVISTE:
-					stvarniPogled.add(new JLabel(new ImageIcon("slike/cudoviste.png")));
-					break;
-					
-				case JAMA:
-					stvarniPogled.add(new JLabel(new ImageIcon("slike/jama.png")));
-					break;
-					
-				case ZLATO:
-					stvarniPogled.add(new JLabel(new ImageIcon("slike/zlato.png")));
-					break;
-					
-				default:
-					stvarniPogled.add(new JLabel(new ImageIcon("slike/tocka.png")));
-					break;
-				}
-				
+				agentovPogled.add(poljeAp);
+				stvarniPogled.add(polje);
 			}
 		}
 		
@@ -309,14 +260,13 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		desniDio.add(new JScrollPane(txtBazaZnanja));
 		this.getContentPane().add(desniDio, BorderLayout.EAST);
 		
-		//stvarniPogled.repaint();
-		//agentovPogled.repaint();
-		//desniDio.repaint();
 		desniDio.revalidate();
 		agentovPogled.revalidate();
-		//stvarniPogled.revalidate();
 	}
 	
+	/**
+	 * Prikaz promjena u postojećem svijetu.
+	 */
 	private void prikaziPromijenjeniSvijet() {
 		if (!svijetJeSpreman) return;
 		int apSirina = VisaSila.get().getSvijet().getVelicinaSvijeta().width;
@@ -325,99 +275,131 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		
 		Component[] comps = stvarniPogled.getComponents();
 		Component[] compsAp = agentovPogled.getComponents();
-		boolean apOpisano = false;
 		
 		for (int y = 1; y <= apVisina; y++) {
 			for (int x = 1; x <= apSirina; x++) {
 				JLabel polje = (JLabel) comps[(y-1)*apSirina+(x-1)];
 				JLabel poljeAp = (JLabel) compsAp[(y-1)*apSirina+(x-1)];
 				
-				if (x == agentPoz.x && y == agentPoz.y) {
-					polje.setIcon(new ImageIcon("slike/agent.png"));
-					poljeAp.setIcon(new ImageIcon("slike/agent.png"));
-					continue;
-				}
-				poljeAp.setIcon(null);
-				poljeAp.setText("");
-				String opisStr = "";
-				apOpisano = false;
-				AgentPolje ap = VisaSila.get().getAgent().opisiPolje(new Point(x, y));
-				if (ap.isVjetrovito()) {
-					opisStr += "Vj";
-				}
-				if (ap.isSjajno()) {
-					opisStr += "Sj";
-				}
-				if (ap.isSmrdljivo()) {
-					opisStr += "Sm";
-				}
-				if (!opisStr.equals("")) {
-					poljeAp.setText(opisStr);
-					apOpisano = true;
-				}
-				if (!apOpisano) {
-					if (ap.isPosjeceno()) {
-						poljeAp.setIcon(new ImageIcon("slike/tocka.png"));
-						apOpisano = true;
-						
-					} else if (ap.isSigurnoNeposjeceno()) {
-						poljeAp.setIcon(new ImageIcon("slike/upitnik.png"));
-						apOpisano = true;
-						
-					} else {
-						if (ap.isPotencijalnoCudoviste()) {
-							opisStr += "PCu";
-						} else if (ap.isPotencijalnaJama()) {
-							opisStr += "PJa";
-						} else if (ap.isPotencijalnoZlato()) {
-							opisStr += "PZl";
-						}
-						if (!opisStr.equals("")) {
-							poljeAp.setText(opisStr);
-							apOpisano = true;
-						}
-					}
-					if (!apOpisano) {
-						poljeAp.setIcon(new ImageIcon("slike/upitnik.png"));
-						apOpisano = true;
-					}
-				}
-				
-				SadrzajPolja sadrzaj = VisaSila.get().opisiPolje(x, y);
-				switch (sadrzaj) {
-				case CUDOVISTE:
-					polje.setIcon(new ImageIcon("slike/cudoviste.png"));
-					break;
-					
-				case JAMA:
-					polje.setIcon(new ImageIcon("slike/jama.png"));
-					break;
-					
-				case ZLATO:
-					polje.setIcon(new ImageIcon("slike/zlato.png"));
-					break;
-					
-				default:
-					polje.setIcon(new ImageIcon("slike/tocka.png"));
-					break;
-				}
-				
+				postaviSlike(x, y, agentPoz, polje, poljeAp);
 			}
 		}
-		stvarniPogled.repaint();
-		agentovPogled.repaint();
-		
-	}
-
-	private void start() {
-		// TODO Auto-generated method stub
+		desniDio.revalidate();
+		agentovPogled.revalidate();
 		
 	}
 	
+	private void postaviSlike(int x, int y, Point agentPoz, JLabel polje, JLabel poljeAp) {
+		if (x == agentPoz.x && y == agentPoz.y) {
+			if (!VisaSila.get().getAgent().isZivim()) {
+				polje.setIcon(new ImageIcon("slike/agentMrtav.png"));
+				poljeAp.setIcon(new ImageIcon("slike/agentMrtav.png"));
+				
+			} else if (VisaSila.get().getAgent().isNasaoZlato()) {
+				polje.setIcon(new ImageIcon("slike/agentZlato.png"));
+				poljeAp.setIcon(new ImageIcon("slike/agentZlato.png"));
+				
+			} else {
+				polje.setIcon(new ImageIcon("slike/agent.png"));
+				poljeAp.setIcon(new ImageIcon("slike/agent.png"));
+				
+			}
+			
+			return;
+		}
+		AgentPolje ap = VisaSila.get().getAgent().opisiPolje(new Point(x, y));
+		if (ap.isPosjeceno()) {
+			poljeAp.setIcon(new ImageIcon("slike/tocka.png"));
+			
+		} else if (ap.isPotencijalnaJama() && ap.isPotencijalnoCudoviste() && ap.isPotencijalnoZlato()) {
+			poljeAp.setIcon(new ImageIcon("slike/JCZ.png"));
+			
+		} else if (ap.isPotencijalnaJama() && ap.isPotencijalnoCudoviste() && !ap.isPotencijalnoZlato()) {
+			poljeAp.setIcon(new ImageIcon("slike/JC.png"));
+			
+		} else if (ap.isPotencijalnaJama() && !ap.isPotencijalnoCudoviste() && ap.isPotencijalnoZlato()) {
+			poljeAp.setIcon(new ImageIcon("slike/JZ.png"));
+			
+		} else if (ap.isPotencijalnaJama() && !ap.isPotencijalnoCudoviste() && !ap.isPotencijalnoZlato()) {
+			poljeAp.setIcon(new ImageIcon("slike/J.png"));
+			
+		} else if (!ap.isPotencijalnaJama() && ap.isPotencijalnoCudoviste() && ap.isPotencijalnoZlato()) {
+			poljeAp.setIcon(new ImageIcon("slike/CZ.png"));
+			
+		} else if (!ap.isPotencijalnaJama() && ap.isPotencijalnoCudoviste() && !ap.isPotencijalnoZlato()) {
+			poljeAp.setIcon(new ImageIcon("slike/C.png"));
+			
+		} else if (!ap.isPotencijalnaJama() && !ap.isPotencijalnoCudoviste() && ap.isPotencijalnoZlato()) {
+			poljeAp.setIcon(new ImageIcon("slike/Z.png"));
+			
+			
+		} else if (ap.isVjetrovito() && ap.isSmrdljivo() && ap.isSjajno()) {
+			poljeAp.setIcon(new ImageIcon("slike/VSmSj.png"));
+			
+		} else if (ap.isVjetrovito() && ap.isSmrdljivo() && !ap.isSjajno()) {
+			poljeAp.setIcon(new ImageIcon("slike/VSm.png"));
+			
+		} else if (ap.isVjetrovito() && !ap.isSmrdljivo() && ap.isSjajno()) {
+			poljeAp.setIcon(new ImageIcon("slike/VSj.png"));
+			
+		} else if (ap.isVjetrovito() && !ap.isSmrdljivo() && !ap.isSjajno()) {
+			poljeAp.setIcon(new ImageIcon("slike/V.png"));
+			
+		} else if (!ap.isVjetrovito() && ap.isSmrdljivo() && ap.isSjajno()) {
+			poljeAp.setIcon(new ImageIcon("slike/SmSj.png"));
+			
+		} else if (!ap.isVjetrovito() && ap.isSmrdljivo() && !ap.isSjajno()) {
+			poljeAp.setIcon(new ImageIcon("slike/Sm.png"));
+			
+		} else if (!ap.isVjetrovito() && !ap.isSmrdljivo() && ap.isSjajno()) {
+			poljeAp.setIcon(new ImageIcon("slike/Sj.png"));
+			
+		} else {
+			poljeAp.setIcon(new ImageIcon("slike/upitnik.png"));
+			
+		}
+		
+		SadrzajPolja sadrzaj = VisaSila.get().opisiPolje(x, y);
+		switch (sadrzaj) {
+		case CUDOVISTE:
+			polje.setIcon(new ImageIcon("slike/cudoviste.png"));
+			break;
+			
+		case JAMA:
+			polje.setIcon(new ImageIcon("slike/jama.png"));
+			break;
+			
+		case ZLATO:
+			polje.setIcon(new ImageIcon("slike/zlato.png"));
+			break;
+			
+		default:
+			polje.setIcon(new ImageIcon("slike/tocka.png"));
+			break;
+		}
+		
+	}
+
+	/**
+	 * Pokretanje automatskog pomicanja agenta.
+	 */
+	private void start() {
+		if (svijetJeSpreman) {
+			// TODO: Vrti agenta...
+		}
+		
+	}
+	
+	/**
+	 * Pomicanje agenta za jedan korak.
+	 */
 	private void korak() {
 		VisaSila.get().getAgent().pomakniSe();
 	}
 	
+	/**
+	 * Pauziranje automatskog pomicanja agenta.
+	 */
 	private void pause() {
 		// TODO Auto-generated method stub
 		
