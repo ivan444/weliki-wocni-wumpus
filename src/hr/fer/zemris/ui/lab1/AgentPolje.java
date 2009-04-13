@@ -12,6 +12,8 @@ public class AgentPolje {
 	private boolean potencijalnaJama;
 	private boolean potencijalnoCudoviste;
 	private boolean potencijalnoZlato;
+	private boolean cudoviste;
+	private boolean jama;
 	
 	public AgentPolje() {
 	}
@@ -78,5 +80,21 @@ public class AgentPolje {
 
 	public void setPotencijalnoZlato(boolean potencijalnoZlato) {
 		this.potencijalnoZlato = potencijalnoZlato;
+	}
+
+	public boolean isCudoviste() {
+		return cudoviste;
+	}
+
+	public void setCudoviste(boolean cudoviste) {
+		this.cudoviste = cudoviste;
+	}
+
+	public boolean isJama() {
+		return jama;
+	}
+
+	public void setJama(boolean jama) {
+		this.jama = jama;
 	}
 }

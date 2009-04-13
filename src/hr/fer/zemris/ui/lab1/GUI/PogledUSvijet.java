@@ -55,10 +55,10 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
             }
         });
 		svijetJeSpreman = false;
-		initGUI();
 		setTitle("Ultimativno rješenje za traženje zlata i svih zlatnih proizvoda");
 		CentralnaInformacijskaAgencija.getCIA().pretplataNaPoruke(this);
 		CentralnaInformacijskaAgencija.getCIA().pretplataNaStanjeSvijeta(this);
+		initGUI();
 	}
 	
 	/**
@@ -113,6 +113,16 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		});
 		newWorld.setText("Novi svijet");
 		gornjiDio.add(newWorld);
+		
+		JButton clear = new JButton(new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zaboraviObavijesti();
+			}
+		});
+		clear.setText("Ukloni ispis");
+		gornjiDio.add(clear);
+		
 		this.getContentPane().add(gornjiDio, BorderLayout.NORTH);
 		// KRAJ: Gornja traka
 		
@@ -158,7 +168,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		predefiniraneVrijednosti();
 		// KRAJ: Donji dio, ispis rezultata.
 		
-		prikaziNoviSvijet();
+		stvoriNoviSvijet();
 		
 		// POCETAK: Sredina (agentov pogled)
 //		JPanel sredina = new JPanel(new BorderLayout());
@@ -190,12 +200,18 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		txtVisinaSvijeta.setText("5");
 	}
 	
+	
+	private void zaboraviObavijesti() {
+		this.txtReport.setText("");
+	}
+	
 	/**
 	 * Stvaranje novog svijeta.
 	 * 
 	 * @return True ako je svijet stvoren, inače false.
 	 */
 	private boolean stvoriNoviSvijet() {
+		zaboraviObavijesti();
 		this.svijetJeSpreman = false;
 		int apSirina;
 		int apVisina;
@@ -311,6 +327,12 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		if (ap.isPosjeceno()) {
 			poljeAp.setIcon(new ImageIcon("slike/tocka.png"));
 			
+		} else if (ap.isCudoviste()) {
+			poljeAp.setIcon(new ImageIcon("slike/cudoviste.png"));
+			
+		} else if (ap.isJama()) {
+			poljeAp.setIcon(new ImageIcon("slike/jama.png"));
+			
 		} else if (ap.isPotencijalnaJama() && ap.isPotencijalnoCudoviste() && ap.isPotencijalnoZlato()) {
 			poljeAp.setIcon(new ImageIcon("slike/JCZ.png"));
 			
@@ -423,7 +445,6 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 
 	@Override
 	public void interakcija() {
-		interakcija(VisaSila.get().getAgent().getPozicija().toString());
 		prikaziPromijenjeniSvijet();
 		
 	}
