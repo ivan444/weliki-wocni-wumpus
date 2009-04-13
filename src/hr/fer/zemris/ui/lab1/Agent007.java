@@ -214,14 +214,6 @@ public class Agent007 implements IAgent {
 			odabraoPolje = true;
 		}
 		
-		if (nasaoZlato && !odabraoPolje) {
-			this.potencijalnaZlata.clear();
-			odiNaPolje(1, 1);
-			CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Imamo zlato!");
-			sljedecaKoordinata = definiraniPut.poll();
-			odabraoPolje = true;
-		}
-		
 		// trenutna koordinata na kojoj se nalazimo
 		Point koordinata = new Point(pozicija.x, pozicija.y);
 		
@@ -242,7 +234,7 @@ public class Agent007 implements IAgent {
 		// postavlja koordinate polja kojega agent posjecuje u iducem koraku u tocku
 		// ---- Point sljedecaKoordinata ----
 		
-		// prvotno susjedna polja !!
+		// prvotno susjedna sigurna polja i potencijalna zlata!!
 		for (int i = 0; i < susjedne.length && !odabraoPolje; i++) {
 			if (!svijet.postojiPolje(susjedne[i])) continue;
 			
@@ -253,29 +245,28 @@ public class Agent007 implements IAgent {
 				sljedecaKoordinata.y = susjedne[i].y;
 				odabraoPolje = true;
 				break;
-			}		
-			// samo sigurna, bez propuha i smrada, ali i bez sjaja ili potencijalnog zlata
-			else if (sigurnaNeposjecenaPolja.contains(susjedne[i])) {
-				sljedecaKoordinata.x = susjedne[i].x;
-				sljedecaKoordinata.y = susjedne[i].y;
+			}
+		}
+		
+		// Ostala potencijalna zlata i sigurna polja
+		for (Point potZlato : potencijalnaZlata) {
+			if (sigurnaNeposjecenaPolja.contains(potZlato)) {
+				odiNaPolje(potZlato.x, potZlato.y);
+				sljedecaKoordinata = definiraniPut.poll();
 				odabraoPolje = true;
 				break;
 			}
 		}
 		
-		// nakon toga NESUSJEDNA, iz liste neposjecenih sigurnih
-		if (!odabraoPolje) {
-			for (Point nesusjedna : sigurnaNeposjecenaPolja) {
-				// sigurna i u skupu potencijalnaZlata
-				if (potencijalnaZlata.contains(nesusjedna) &&
-						!potencijalnaCudovista.contains(nesusjedna) &&
-						!potencijalneJame.contains(nesusjedna) &&
-						odiNaPolje(nesusjedna.x, nesusjedna.y)) {
-					sljedecaKoordinata = definiraniPut.poll();
-					odabraoPolje = true;
-					break;
-				}	
-				
+		// susjedna sigurna polja !!
+		for (int i = 0; i < susjedne.length && !odabraoPolje; i++) {
+			if (!svijet.postojiPolje(susjedne[i])) continue;
+			
+			if (sigurnaNeposjecenaPolja.contains(susjedne[i])) {
+				sljedecaKoordinata.x = susjedne[i].x;
+				sljedecaKoordinata.y = susjedne[i].y;
+				odabraoPolje = true;
+				break;
 			}
 		}
 		
@@ -288,8 +279,7 @@ public class Agent007 implements IAgent {
 		}
 				
 		// a ako ni sada nismo nasli sigurno polje, agent odlazi na
-		// bilo koje polje iz liste potencijalnih jama ili cudovista
-		
+		// bilo koje polje iz liste potencijalnih zlata, jama ili cudovista.
 		if (!odabraoPolje) {
 			Point odabrano = null;
 			if (!potencijalnaZlata.isEmpty()) {
@@ -318,11 +308,19 @@ public class Agent007 implements IAgent {
 		
 		if (sadrzaj.equals(SadrzajPolja.ZLATO)) {
 			nasaoZlato = true;
+			definiraniPut.clear();
+			odiNaPolje(1, 1);
+			CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Imamo zlato!");
 		}
 				
 		if (isZivim()) {
 			promotriOkolis(); // nakon svakog pomaka ponovno promatra okolis i obogacuje bazu znanja
 		}
+		
+		if (nasaoZlato) {
+			potencijalnaZlata.clear();
+		}
+		
 		CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();
 	}
 	
