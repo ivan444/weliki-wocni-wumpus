@@ -376,6 +376,9 @@ public class Agent007 implements IAgent {
 	 * @param posjecene Skup posjećenih točaka.
 	 * @return True ako smo uspješno izgradili put.
 	 */
+	
+	//TODO -- ovisno o tome gdje se nalazi odrediste u odnosu na trenutnu poziciju, birati odgov. put
+	
 	private boolean izgradnjaPuta(int x, int y, Point odrediste, Queue<Point> put, Set<Point> posjecene) {
 		Point radna = new Point(x, y);
 		posjecene.add(new Point(x, y));
