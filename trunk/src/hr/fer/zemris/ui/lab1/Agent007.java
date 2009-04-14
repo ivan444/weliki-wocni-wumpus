@@ -249,12 +249,14 @@ public class Agent007 implements IAgent {
 		}
 		
 		// Ostala potencijalna zlata i sigurna polja
-		for (Point potZlato : potencijalnaZlata) {
-			if (sigurnaNeposjecenaPolja.contains(potZlato)) {
-				odiNaPolje(potZlato.x, potZlato.y);
-				sljedecaKoordinata = definiraniPut.poll();
-				odabraoPolje = true;
-				break;
+		if (!odabraoPolje) {
+			for (Point potZlato : potencijalnaZlata) {
+				if (sigurnaNeposjecenaPolja.contains(potZlato)) {
+					odiNaPolje(potZlato.x, potZlato.y);
+					sljedecaKoordinata = definiraniPut.poll();
+					odabraoPolje = true;
+					break;
+				}
 			}
 		}
 		
@@ -282,20 +284,31 @@ public class Agent007 implements IAgent {
 		// bilo koje polje iz liste potencijalnih zlata, jama ili cudovista.
 		if (!odabraoPolje) {
 			Point odabrano = null;
+			Point[] poljaZaOdabir = null;
 			if (!potencijalnaZlata.isEmpty()) {
-				odabrano = potencijalnaZlata.iterator().next();
+				//odabrano = potencijalnaZlata.iterator().next();
+				poljaZaOdabir = new Point[potencijalnaZlata.size()];
+				potencijalnaZlata.toArray(poljaZaOdabir);
 				
 			} else if (!potencijalneJame.isEmpty()) {
-				odabrano = potencijalneJame.iterator().next();
+				//odabrano = potencijalneJame.iterator().next();
+				poljaZaOdabir = new Point[potencijalneJame.size()];
+				potencijalneJame.toArray(poljaZaOdabir);
 				
 			} else if (!potencijalnaCudovista.isEmpty()) {
-				odabrano = potencijalnaCudovista.iterator().next();
+				//odabrano = potencijalnaCudovista.iterator().next();
+				poljaZaOdabir = new Point[potencijalnaCudovista.size()];
+				potencijalnaCudovista.toArray(poljaZaOdabir);
 			}
 			
-			if (odabrano == null) {
+			if (poljaZaOdabir == null) {
 				// Ne bi se smjelo dogoditi, ali da se pokrije i taj slučaj.
 				odabrano = new Point(1,1);
+				
+			} else {
+				odabrano = poljaZaOdabir[(int) Math.round(Math.random()*(poljaZaOdabir.length-1))];
 			}
+			
 			odiNaPolje(odabrano.x, odabrano.y);
 			sljedecaKoordinata = definiraniPut.poll();
 			odabraoPolje = true;
