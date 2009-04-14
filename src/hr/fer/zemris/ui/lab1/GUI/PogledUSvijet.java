@@ -170,22 +170,6 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		
 		stvoriNoviSvijet();
 		
-		// POCETAK: Sredina (agentov pogled)
-//		JPanel sredina = new JPanel(new BorderLayout());
-//		sredina.add(agentovPogled, BorderLayout.CENTER);
-//		getContentPane().add(agentovPogled, BorderLayout.CENTER);
-		// KRAJ: Sredina (agentov pogled)
-		
-//		// POCETAK: Desni dio (stvarni svijet i baza znanja)
-//		JPanel desniDio = new JPanel(new GridLayout(2,1));
-//		desniDio.add(stvarniPogled);
-//		txtBazaZnanja = new JTextPane();
-//		txtBazaZnanja.setEditable(false);
-//		txtBazaZnanja.setPreferredSize(new Dimension(150, 150));
-//		desniDio.add(new JScrollPane(txtBazaZnanja));
-//		this.getContentPane().add(desniDio, BorderLayout.EAST);
-//		// KRAJ: Desni dio (stvarni svijet i baza znanja)
-		
 		pack();
 		svijetJeSpreman = true;
 	}
@@ -194,7 +178,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 	 * Postavljanje predefiniranih vrijednosti za stvaranje novog svijeta.
 	 */
 	private void predefiniraneVrijednosti() {
-		txtPCudovista.setText("0.25");
+		txtPCudovista.setText("0.15");
 		txtPJama.setText("0.15");
 		txtSirinaSvijeta.setText("5");
 		txtVisinaSvijeta.setText("5");
