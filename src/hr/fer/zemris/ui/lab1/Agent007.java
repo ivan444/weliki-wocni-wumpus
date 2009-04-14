@@ -319,6 +319,7 @@ public class Agent007 implements IAgent {
 		
 		if (nasaoZlato) {
 			potencijalnaZlata.clear();
+			sjajnaPolja.clear();
 		}
 		
 		CentralnaInformacijskaAgencija.getCIA().obavijestiOPromjeni();

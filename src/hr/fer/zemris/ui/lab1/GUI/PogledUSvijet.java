@@ -325,7 +325,30 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		}
 		AgentPolje ap = VisaSila.get().getAgent().opisiPolje(new Point(x, y));
 		if (ap.isPosjeceno()) {
-			poljeAp.setIcon(new ImageIcon("slike/tocka.png"));
+			if (ap.isVjetrovito() && ap.isSmrdljivo() && ap.isSjajno()) {
+				poljeAp.setIcon(new ImageIcon("slike/VSmSj.png"));
+				
+			} else if (ap.isVjetrovito() && ap.isSmrdljivo() && !ap.isSjajno()) {
+				poljeAp.setIcon(new ImageIcon("slike/VSm.png"));
+				
+			} else if (ap.isVjetrovito() && !ap.isSmrdljivo() && ap.isSjajno()) {
+				poljeAp.setIcon(new ImageIcon("slike/VSj.png"));
+				
+			} else if (ap.isVjetrovito() && !ap.isSmrdljivo() && !ap.isSjajno()) {
+				poljeAp.setIcon(new ImageIcon("slike/V.png"));
+				
+			} else if (!ap.isVjetrovito() && ap.isSmrdljivo() && ap.isSjajno()) {
+				poljeAp.setIcon(new ImageIcon("slike/SmSj.png"));
+				
+			} else if (!ap.isVjetrovito() && ap.isSmrdljivo() && !ap.isSjajno()) {
+				poljeAp.setIcon(new ImageIcon("slike/Sm.png"));
+				
+			} else if (!ap.isVjetrovito() && !ap.isSmrdljivo() && ap.isSjajno()) {
+				poljeAp.setIcon(new ImageIcon("slike/Sj.png"));
+				
+			} else {
+				poljeAp.setIcon(new ImageIcon("slike/tocka.png"));
+			}
 			
 		} else if (ap.isCudoviste()) {
 			poljeAp.setIcon(new ImageIcon("slike/cudoviste.png"));
@@ -353,28 +376,6 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 			
 		} else if (!ap.isPotencijalnaJama() && !ap.isPotencijalnoCudoviste() && ap.isPotencijalnoZlato()) {
 			poljeAp.setIcon(new ImageIcon("slike/Z.png"));
-			
-			
-		} else if (ap.isVjetrovito() && ap.isSmrdljivo() && ap.isSjajno()) {
-			poljeAp.setIcon(new ImageIcon("slike/VSmSj.png"));
-			
-		} else if (ap.isVjetrovito() && ap.isSmrdljivo() && !ap.isSjajno()) {
-			poljeAp.setIcon(new ImageIcon("slike/VSm.png"));
-			
-		} else if (ap.isVjetrovito() && !ap.isSmrdljivo() && ap.isSjajno()) {
-			poljeAp.setIcon(new ImageIcon("slike/VSj.png"));
-			
-		} else if (ap.isVjetrovito() && !ap.isSmrdljivo() && !ap.isSjajno()) {
-			poljeAp.setIcon(new ImageIcon("slike/V.png"));
-			
-		} else if (!ap.isVjetrovito() && ap.isSmrdljivo() && ap.isSjajno()) {
-			poljeAp.setIcon(new ImageIcon("slike/SmSj.png"));
-			
-		} else if (!ap.isVjetrovito() && ap.isSmrdljivo() && !ap.isSjajno()) {
-			poljeAp.setIcon(new ImageIcon("slike/Sm.png"));
-			
-		} else if (!ap.isVjetrovito() && !ap.isSmrdljivo() && ap.isSjajno()) {
-			poljeAp.setIcon(new ImageIcon("slike/Sj.png"));
 			
 		} else {
 			poljeAp.setIcon(new ImageIcon("slike/upitnik.png"));
