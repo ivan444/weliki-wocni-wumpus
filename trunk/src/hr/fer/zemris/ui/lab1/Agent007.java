@@ -305,16 +305,16 @@ public class Agent007 implements IAgent {
 		SadrzajPolja sadrzaj = svijet.posjetiPolje(this, sljedecaKoordinata.x, sljedecaKoordinata.y);
 				
 		promijeniPoziciju(sljedecaKoordinata.x, sljedecaKoordinata.y, false);
+				
+		if (isZivim()) {
+			promotriOkolis(); // nakon svakog pomaka ponovno promatra okolis i obogacuje bazu znanja
+		}
 		
 		if (sadrzaj.equals(SadrzajPolja.ZLATO)) {
 			nasaoZlato = true;
 			definiraniPut.clear();
 			odiNaPolje(1, 1);
 			CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Imamo zlato!");
-		}
-				
-		if (isZivim()) {
-			promotriOkolis(); // nakon svakog pomaka ponovno promatra okolis i obogacuje bazu znanja
 		}
 		
 		if (nasaoZlato) {
