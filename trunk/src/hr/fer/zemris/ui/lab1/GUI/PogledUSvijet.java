@@ -70,7 +70,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {}
         this.setLocationByPlatform(true);
-        this.setSize(800, 600);
+        this.setPreferredSize(new Dimension(900, 700));
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		this.getContentPane().setLayout(new BorderLayout());
@@ -78,14 +78,14 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		// POCETAK: Gornja traka
 		JPanel gornjiDio = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 2));
 
-		JButton start = new JButton(new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				start();
-			}
-		});
-		start.setText("Pokreni potragu");
-		gornjiDio.add(start);
+//		JButton start = new JButton(new AbstractAction() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				start();
+//			}
+//		});
+//		start.setText("Pokreni potragu");
+//		gornjiDio.add(start);
 		
 		JButton korak = new JButton(new AbstractAction() {
 			@Override
@@ -96,14 +96,14 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		korak.setText("Napravi korak");
 		gornjiDio.add(korak);
 		
-		JButton pause = new JButton(new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pause();
-			}
-		});
-		pause.setText("Pauza");
-		gornjiDio.add(pause);
+//		JButton pause = new JButton(new AbstractAction() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				pause();
+//			}
+//		});
+//		pause.setText("Pauza");
+//		gornjiDio.add(pause);
 		
 		JButton newWorld = new JButton(new AbstractAction() {
 			@Override
@@ -153,6 +153,33 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		vjerojatnostiParam.add(txtPJama);
 		velicinaParam.setPreferredSize((new Dimension(150, 0)));
 		parametri.add(vjerojatnostiParam);
+		
+		JPanel legenda = new JPanel(new GridLayout(4, 1, 0, 2));
+		legenda.setBorder(BorderFactory.createTitledBorder("Legenda"));
+		JLabel legendaElm = null;
+		
+		legendaElm = new JLabel("Vjetar, smrad, sjaj");
+		legendaElm.setIconTextGap(2);
+		legendaElm.setIcon(new ImageIcon("slike/VSmSj.png"));
+		legenda.add(legendaElm);
+		
+		legendaElm = new JLabel("<html>Potencijalna jama,<br>čudovište, zlato</html>");
+		legendaElm.setIconTextGap(2);
+		legendaElm.setIcon(new ImageIcon("slike/JCZ.png"));
+		legenda.add(legendaElm);
+		
+		legendaElm = new JLabel("Sigurno čudovište");
+		legendaElm.setIconTextGap(2);
+		legendaElm.setIcon(new ImageIcon("slike/cudoviste.png"));
+		legenda.add(legendaElm);
+		
+		legendaElm = new JLabel("Sigurna jama");
+		legendaElm.setIconTextGap(2);
+		legendaElm.setIcon(new ImageIcon("slike/jama.png"));
+		legenda.add(legendaElm);
+		
+		parametri.add(legenda);
+		
 		this.getContentPane().add(parametri, BorderLayout.WEST);
 		// KRAJ: Lijevi izbornik (parametri)
 
@@ -334,6 +361,9 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 				poljeAp.setIcon(new ImageIcon("slike/tocka.png"));
 			}
 			
+		} else if (ap.isZlato()) {
+			polje.setIcon(new ImageIcon("slike/zlato.png"));
+			
 		} else if (ap.isCudoviste()) {
 			poljeAp.setIcon(new ImageIcon("slike/cudoviste.png"));
 			
@@ -387,15 +417,15 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		
 	}
 
-	/**
-	 * Pokretanje automatskog pomicanja agenta.
-	 */
-	private void start() {
-		if (svijetJeSpreman) {
-			// TODO: Vrti agenta...
-		}
-		
-	}
+//	/**
+//	 * Pokretanje automatskog pomicanja agenta.
+//	 */
+//	private void start() {
+//		if (svijetJeSpreman) {
+//			// TODO: Vrti agenta...
+//		}
+//		
+//	}
 	
 	/**
 	 * Pomicanje agenta za jedan korak.
@@ -404,13 +434,13 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		VisaSila.get().getAgent().pomakniSe();
 	}
 	
-	/**
-	 * Pauziranje automatskog pomicanja agenta.
-	 */
-	private void pause() {
-		// TODO Auto-generated method stub
-		
-	}
+//	/**
+//	 * Pauziranje automatskog pomicanja agenta.
+//	 */
+//	private void pause() {
+//		// TODO Auto-generated method stub
+//		
+//	}
 	
 	/**
 	 * Pokretanje GUI-a.
