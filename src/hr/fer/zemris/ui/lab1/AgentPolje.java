@@ -14,6 +14,7 @@ public class AgentPolje {
 	private boolean potencijalnoZlato;
 	private boolean cudoviste;
 	private boolean jama;
+	private boolean zlato;
 	
 	public AgentPolje() {
 	}
@@ -96,5 +97,13 @@ public class AgentPolje {
 
 	public void setJama(boolean jama) {
 		this.jama = jama;
+	}
+
+	public boolean isZlato() {
+		return zlato;
+	}
+
+	public void setZlato(boolean zlato) {
+		this.zlato = zlato;
 	}
 }

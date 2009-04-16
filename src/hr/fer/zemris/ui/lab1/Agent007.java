@@ -27,6 +27,7 @@ public class Agent007 implements IAgent {
 	private Point pozicija;
 	private boolean zivim;
 	private boolean nasaoZlato;
+	private Point pozicijaZlata;
 	
 	/**
 	 * Konstruktor.
@@ -45,6 +46,7 @@ public class Agent007 implements IAgent {
 		potencijalnaCudovista = new HashSet<Point>();
 		potencijalnaZlata = new HashSet<Point>();
 		definiraniPut = new LinkedList<Point>();
+		pozicijaZlata = null;
 		this.svijet = svijet;
 		this.zivim = true;
 		this.nasaoZlato = false;
@@ -93,11 +95,13 @@ public class Agent007 implements IAgent {
 		ispraviPretpostavke(koordinata, susjedne);
 		
 		if (sjajnaPolja.contains(koordinata)) {
+			Set<Point> emptySet = new HashSet<Point>();
 			Set<Point> zlato = new HashSet<Point>();
-			dopuniZnanje(koordinata, zlato, "zlato", potencijalnaZlata,	sigurnaCudovista, sigurneJame);
+			dopuniZnanje(koordinata, zlato, "zlato", potencijalnaZlata,	sigurnaCudovista, sigurneJame, emptySet);
 			if (!zlato.isEmpty()) {
 				definiraniPut.clear();
-				definiraniPut.offer(zlato.iterator().next());
+				pozicijaZlata = zlato.iterator().next();
+				definiraniPut.offer(pozicijaZlata);
 			}
 		}
 		
@@ -115,17 +119,17 @@ public class Agent007 implements IAgent {
 			Set<Point> emptySet = new HashSet<Point>();
 			if (smrdljivaPolja.contains(koordinata)) {
 				dopuniZnanje(koordinata, sigurnaCudovista, "čudovište", potencijalnaCudovista,
-						sigurneJame, emptySet);
+						sigurneJame, emptySet, sigurnaNeposjecenaPolja);
 			}
 			if (vjetrovitaPolja.contains(koordinata)) {
 				dopuniZnanje(koordinata, sigurneJame, "jama", potencijalneJame,
-						sigurnaCudovista, emptySet);
+						sigurnaCudovista, emptySet, sigurnaNeposjecenaPolja);
 			}
 		}
 	}
 	
 	private void dopuniZnanje(Point koordinata, Set<Point> ulazniSkup, String tip,
-			Set<Point> potencijalniSkup, Set<Point> poznatiSkup1, Set<Point> poznatiSkup2) {
+			Set<Point> potencijalniSkup, Set<Point> poznatiSkup1, Set<Point> poznatiSkup2, Set<Point> poznatiSkup3) {
 		Point[] susjedne = new Point[4];
 		susjedne[0] = new Point (koordinata.x, koordinata.y+1);
 		susjedne[1] = new Point (koordinata.x, koordinata.y-1);
@@ -134,7 +138,7 @@ public class Agent007 implements IAgent {
 		
 		for (int i = 0; i < susjedne.length; i++) {
 			if (!svijet.postojiPolje(susjedne[i])) continue;
-			if (posjecenaPolja.contains(susjedne[i]) || sigurnaNeposjecenaPolja.contains(susjedne[i])
+			if (posjecenaPolja.contains(susjedne[i]) || poznatiSkup3.contains(susjedne[i])
 					|| poznatiSkup1.contains(susjedne[i]) || poznatiSkup2.contains(susjedne[i])) {
 				susjedne[i] = null;
 			}
@@ -154,11 +158,11 @@ public class Agent007 implements IAgent {
 				if (brojPreostalih == 1) {
 					ulazniSkup.add(susjedne[i]);
 					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na polju (" + susjedne[i].x
-							+ ", " + susjedne[i].y + ")nalazi se " + tip + "!");
+							+ ", " + susjedne[i].y + ") nalazi se " + tip + "!");
 				} else {
 					potencijalniSkup.add(susjedne[i]);
 					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na polju (" + susjedne[i].x
-							+ ", " + susjedne[i].y + ")možda se nalazi " + tip + ".");
+							+ ", " + susjedne[i].y + ") možda se nalazi " + tip + ".");
 				}
 			}
 		}
@@ -306,7 +310,9 @@ public class Agent007 implements IAgent {
 				odabrano = new Point(1,1);
 				
 			} else {
-				odabrano = poljaZaOdabir[(int) Math.round(Math.random()*(poljaZaOdabir.length-1))];
+				do {
+					odabrano = poljaZaOdabir[(int) Math.round(Math.random()*(poljaZaOdabir.length-1))];
+				} while(this.sigurnaCudovista.contains(odabrano) || this.sigurneJame.contains(odabrano));
 			}
 			
 			odiNaPolje(odabrano.x, odabrano.y);
@@ -389,139 +395,66 @@ public class Agent007 implements IAgent {
 	 * @param posjecene Skup posjećenih točaka.
 	 * @return True ako smo uspješno izgradili put.
 	 */
-	
-	//TODO -- ovisno o tome gdje se nalazi odrediste u odnosu na trenutnu poziciju, birati odgov. put
-	
 	private boolean izgradnjaPuta(int x, int y, Point odrediste, Queue<Point> put, Set<Point> posjecene) {
 		Point radna = new Point(x, y);
 		posjecene.add(new Point(x, y));
 		
-		if (odrediste.x >= x) {
-			if (odrediste.y >= y) {
-					
-					radna.x = x+1;
-					radna.y = y;
-					if (radna.equals(odrediste)) {
-						put.offer(odrediste);
-						return true;
-					}
-					if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-						if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
-							put.offer(radna);
-							return true;
-						}
-					}
-					
-					radna.x = x;
-					radna.y = y+1;
-					if (radna.equals(odrediste)) {
-						put.offer(odrediste);
-						return true;
-					}
-					if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-						if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
-							put.offer(radna);
-							return true;
-						}
-					}			
-				
-				}
-			
-			else if (odrediste.y < y){
-				
-					radna.x = x+1;
-					radna.y = y;
-					if (radna.equals(odrediste)) {
-						put.offer(odrediste);
-						return true;
-					}
-					if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-						if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
-							put.offer(radna);
-							return true;
-						}
-					}
-					
-					radna.x = x;
-					radna.y = y-1;
-					if (radna.equals(odrediste)) {
-						put.offer(odrediste);
-						return true;
-					}
-					if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-						if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
-							put.offer(radna);
-							return true;
-						}
-					}			
-				
-				}
-			}
+		int xKoef = 1;
+		int yKoef = 1;
 		
-			
-		else if (odrediste.x < x) {
-			if (odrediste.y >= y) {
+		if (odrediste.x <= x) {
+			xKoef = -1;
+		}
+		
+		if (odrediste.y <= y) {
+			yKoef = -1;
+		}
+					
+		radna.x = x+xKoef;
+		radna.y = y;
+		if (pogledaj(radna, posjecene, odrediste, put)) return true;
+		
+		radna.x = x;
+		radna.y = y+yKoef;
+		if (pogledaj(radna, posjecene, odrediste, put)) return true;		
 				
-				radna.x = x-1;
-				radna.y = y;
-				if (radna.equals(odrediste)) {
-					put.offer(odrediste);
-					return true;
-				}
-				if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-					if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
-						put.offer(radna);
-						return true;
-					}
-				}
+		radna.x = x-xKoef;
+		radna.y = y;
+		if (pogledaj(radna, posjecene, odrediste, put)) return true;
+		
+		radna.x = x;
+		radna.y = y-yKoef;
+		if (pogledaj(radna, posjecene, odrediste, put)) return true;		
 				
-				radna.x = x;
-				radna.y = y+1;
-				if (radna.equals(odrediste)) {
-					put.offer(odrediste);
-					return true;
-				}
-				if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-					if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
-						put.offer(radna);
-						return true;
-					}
-				}								
-			}
-			
-			else if(odrediste.y < y) {
-				
-				radna.x = x-1;
-				radna.y = y;
-				if (radna.equals(odrediste)) {
-					put.offer(odrediste);
-					return true;
-				}
-				if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-					if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
-						put.offer(radna);
-						return true;
-					}
-				}
-				
-				radna.x = x;
-				radna.y = y-1;
-				if (radna.equals(odrediste)) {
-					put.offer(odrediste);
-					return true;
-				}
-				if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-					if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
-						put.offer(radna);
-						return true;
-					}
-				}		
+		return false;
+	}
+	
+	/**
+	 * TODO: Komentiraj!
+	 *  
+	 * @param radna
+	 * @param posjecene
+	 * @param odrediste
+	 * @param put
+	 * @return
+	 */
+	private boolean pogledaj(Point radna, Set<Point> posjecene, Point odrediste,
+			Queue<Point> put) {
+		
+		if (radna.equals(odrediste)) {
+			put.offer(odrediste);
+			return true;
+		}
+		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+			if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+				put.offer(radna);
+				return true;
 			}
 		}
 		
 		return false;
 	}
-	
+
 	public void ubij() {
 		this.zivim = false;
 		CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Agent je mrtav");
@@ -554,6 +487,9 @@ public class Agent007 implements IAgent {
 		opis.setPotencijalnoZlato(this.potencijalnaZlata.contains(polje));
 		opis.setCudoviste(this.sigurnaCudovista.contains(polje));
 		opis.setJama(this.sigurneJame.contains(polje));
+		if (pozicijaZlata != null && polje.equals(pozicijaZlata)) {
+			opis.setZlato(true);
+		}
 		
 		return opis;
 	}
