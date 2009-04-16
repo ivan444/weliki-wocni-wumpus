@@ -154,11 +154,11 @@ public class Agent007 implements IAgent {
 				if (brojPreostalih == 1) {
 					ulazniSkup.add(susjedne[i]);
 					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na polju (" + susjedne[i].x
-							+ ", " + susjedne[i].y + ") se nalazi " + tip + "!");
+							+ ", " + susjedne[i].y + ")nalazi se " + tip + "!");
 				} else {
 					potencijalniSkup.add(susjedne[i]);
 					CentralnaInformacijskaAgencija.getCIA().dodajPoruku("Na polju (" + susjedne[i].x
-							+ ", " + susjedne[i].y + ") se možda nalazi " + tip + ".");
+							+ ", " + susjedne[i].y + ")možda se nalazi " + tip + ".");
 				}
 			}
 		}
@@ -396,55 +396,126 @@ public class Agent007 implements IAgent {
 		Point radna = new Point(x, y);
 		posjecene.add(new Point(x, y));
 		
-		radna.x = x+1;
-		radna.y = y;
-		if (radna.equals(odrediste)) {
-			put.offer(odrediste);
-			return true;
-		}
-		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-			if (izgradnjaPuta(x+1, y, odrediste, put, posjecene)) {
-				put.offer(radna);
-				return true;
+		if (odrediste.x >= x) {
+			if (odrediste.y >= y) {
+					
+					radna.x = x+1;
+					radna.y = y;
+					if (radna.equals(odrediste)) {
+						put.offer(odrediste);
+						return true;
+					}
+					if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+						if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+							put.offer(radna);
+							return true;
+						}
+					}
+					
+					radna.x = x;
+					radna.y = y+1;
+					if (radna.equals(odrediste)) {
+						put.offer(odrediste);
+						return true;
+					}
+					if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+						if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+							put.offer(radna);
+							return true;
+						}
+					}			
+				
+				}
+			
+			else if (odrediste.y < y){
+				
+					radna.x = x+1;
+					radna.y = y;
+					if (radna.equals(odrediste)) {
+						put.offer(odrediste);
+						return true;
+					}
+					if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+						if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+							put.offer(radna);
+							return true;
+						}
+					}
+					
+					radna.x = x;
+					radna.y = y-1;
+					if (radna.equals(odrediste)) {
+						put.offer(odrediste);
+						return true;
+					}
+					if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+						if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+							put.offer(radna);
+							return true;
+						}
+					}			
+				
+				}
 			}
-		}
 		
-		radna.x = x-1;
-		radna.y = y;
-		if (radna.equals(odrediste)) {
-			put.offer(odrediste);
-			return true;
-		}
-		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-			if (izgradnjaPuta(x-1, y, odrediste, put, posjecene)) {
-				put.offer(radna);
-				return true;
+			
+		else if (odrediste.x < x) {
+			if (odrediste.y >= y) {
+				
+				radna.x = x-1;
+				radna.y = y;
+				if (radna.equals(odrediste)) {
+					put.offer(odrediste);
+					return true;
+				}
+				if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+					if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+						put.offer(radna);
+						return true;
+					}
+				}
+				
+				radna.x = x;
+				radna.y = y+1;
+				if (radna.equals(odrediste)) {
+					put.offer(odrediste);
+					return true;
+				}
+				if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+					if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+						put.offer(radna);
+						return true;
+					}
+				}								
 			}
-		}
-		
-		radna.x = x;
-		radna.y = y+1;
-		if (radna.equals(odrediste)) {
-			put.offer(odrediste);
-			return true;
-		}
-		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-			if (izgradnjaPuta(x, y+1, odrediste, put, posjecene)) {
-				put.offer(radna);
-				return true;
-			}
-		}
-		
-		radna.x = x;
-		radna.y = y-1;
-		if (radna.equals(odrediste)) {
-			put.offer(odrediste);
-			return true;
-		}
-		if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
-			if (izgradnjaPuta(x, y-1, odrediste, put, posjecene)) {
-				put.offer(radna);
-				return true;
+			
+			else if(odrediste.y < y) {
+				
+				radna.x = x-1;
+				radna.y = y;
+				if (radna.equals(odrediste)) {
+					put.offer(odrediste);
+					return true;
+				}
+				if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+					if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+						put.offer(radna);
+						return true;
+					}
+				}
+				
+				radna.x = x;
+				radna.y = y-1;
+				if (radna.equals(odrediste)) {
+					put.offer(odrediste);
+					return true;
+				}
+				if (!posjecene.contains(radna) && this.posjecenaPolja.contains(radna)) {
+					if (izgradnjaPuta(radna.x, radna.y, odrediste, put, posjecene)) {
+						put.offer(radna);
+						return true;
+					}
+				}		
 			}
 		}
 		
