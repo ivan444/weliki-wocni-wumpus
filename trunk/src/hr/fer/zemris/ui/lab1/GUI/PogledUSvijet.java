@@ -173,7 +173,7 @@ public class PogledUSvijet extends JFrame implements IChangeListener {
 		legendaElm.setIcon(new ImageIcon("slike/cudoviste.png"));
 		legenda.add(legendaElm);
 		
-		legendaElm = new JLabel("Sigurna jama");
+		legendaElm = new JLabel("Sigurno jama");
 		legendaElm.setIconTextGap(2);
 		legendaElm.setIcon(new ImageIcon("slike/jama.png"));
 		legenda.add(legendaElm);
